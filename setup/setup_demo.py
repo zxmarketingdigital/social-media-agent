@@ -116,7 +116,7 @@ def main():
     print("skills, colete do aluno as decisões editoriais — sem isso a demo vira")
     print("um 'apresentando a marca' genérico que ele vai descartar.")
     print()
-    print("PERGUNTAS OBRIGATÓRIAS (faça UMA POR VEZ, não em bloco):")
+    print("PERGUNTAS DO BRIEFING (1-6 obrigatórias, 7 opcional — faça UMA POR VEZ):")
     print()
     print("  1) Objetivo da demo")
     print("     → 'O que essa demo precisa provar/comunicar pro seu público?'")

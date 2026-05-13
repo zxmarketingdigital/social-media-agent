@@ -133,10 +133,16 @@ gerar o `design-showcase.html` da marca. Siga exatamente:
 
 5. **Abra no browser:** `open ~/.operacao-ia/data/social-media/design-showcase.html`
 
-6. **Pergunte ao aluno:** "Aprovado? (s/n/ajustar)"
+6. **Confirme que o aluno conseguiu ver:** Antes de perguntar aprovacao, pergunte "Abriu pra voce no browser?". Se ele responder "nao", "fechou sem ver", "perdi a janela" ou similar, instrua a reabrir manualmente:
+   ```
+   open ~/.operacao-ia/data/social-media/design-showcase.html
+   ```
+   Ou no Finder: `~/.operacao-ia/data/social-media/` → duplo-clique no arquivo. Aguarde confirmacao visual antes de avancar pra pergunta de aprovacao.
+
+7. **Pergunte ao aluno:** "Aprovado? (s/n/ajustar)"
    - **s** → marca etapa concluida, avanca pra Etapa 3
    - **n** → volta ao menu da Etapa 2 (refazer escolha do design system)
-   - **ajustar** → aluno descreve o que quer mudar; voce atualiza DESIGN.md + regenera o showcase + pergunta de novo
+   - **ajustar** → aluno descreve o que quer mudar; voce atualiza DESIGN.md + regenera o showcase + repete passo 5 e pergunta de novo
 
 Loop ate aprovacao. NAO avance pra Etapa 3 sem o aluno aprovar visualmente.
 

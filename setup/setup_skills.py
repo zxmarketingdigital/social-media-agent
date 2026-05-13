@@ -85,7 +85,7 @@ SKILLS_DOCS = [
         "slug": "gerar-imagem",
         "icone": "🎨",
         "tipo": "Helper (chamada por outras)",
-        "o_que_faz": "Gateway de geração de imagem com fallback automático: gpt-image-2 (Codex CLI logado em ChatGPT) → Gemini Nano Banana → Higgsfield (opcional) → Imagen 4. Outras skills (carrossel/thumb) chamam esta — você raramente chama direto.",
+        "o_que_faz": "Gateway de geração de imagem com fallback automático: gpt-image-2 (Codex CLI logado em ChatGPT) → Gemini Nano Banana → Imagen 4. Outras skills (carrossel/thumb) chamam esta — você raramente chama direto.",
         "quando_usar": "Quer 1 imagem solta pra qualquer uso (post avulso, banner, capa).",
         "trigger": "'gerar imagem', 'criar imagem', 'image2', 'nano banana'",
         "exemplo": "gerar imagem [descrição]",

@@ -94,11 +94,22 @@ def emit_showcase_instructions(choice: str):
     Imprime instruções para o Claude gerar o design-showcase.html adaptado
     à marca do aluno, abrir no browser e pedir aprovação antes de avançar.
     O DESIGN.md já foi gravado por copy_template() ou emit_custom_marker().
+    No modo custom o DESIGN.md ainda é placeholder — Claude tem que escrever
+    o DESIGN.md REAL antes de gerar o showcase.
     """
     print("\n" + "=" * 60)
     print("📐 SUBPASSO — Gerar Design Showcase (HTML pra aprovação)")
     print("=" * 60)
     print()
+    if choice == "custom":
+        print("⚠️  MODO CUSTOM — o DESIGN.md atual é APENAS placeholder.")
+        print("    Antes de gerar o showcase você (Claude) DEVE:")
+        print("    1) Coletar do aluno: cor primária + cor destaque + estilo + 2-3 referências + tipografia")
+        print("    2) Escrever o DESIGN.md REAL em ~/.operacao-ia/data/social-media/DESIGN.md")
+        print("       seguindo o padrão de templates/design_systems/dark-mono/DESIGN.md")
+        print("       (seções: Cores, Tipografia, Espaçamento, Estilo visual, Componentes)")
+        print("    SÓ DEPOIS prosseguir com o passo 1 abaixo.")
+        print()
     print(">>> CLAUDE: agora gere o design-showcase.html da marca do aluno.")
     print()
     print("1. Leia os 3 inputs:")
