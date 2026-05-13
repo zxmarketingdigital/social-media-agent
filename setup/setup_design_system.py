@@ -3,6 +3,11 @@
 Setup 7 — Etapa 2: Design System.
 Aluno escolhe 1 dos 3 templates ou opta por custom (Claude gera DESIGN.md sob medida).
 Grava ~/.operacao-ia/data/social-media/DESIGN.md.
+
+Subpasso (executado pelo Claude após gravar o DESIGN.md):
+Gerar `design-showcase.html` em ~/.operacao-ia/data/social-media/ adaptando
+o template de referência em `templates/design-showcase-template.html` para
+as cores/tipografia/marca do aluno. Abrir no browser e pedir aprovação.
 """
 import shutil
 import sys
@@ -10,7 +15,11 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = REPO_ROOT / "templates" / "design_systems"
-DESIGN_DST = Path.home() / ".operacao-ia" / "data" / "social-media" / "DESIGN.md"
+SHOWCASE_TEMPLATE = REPO_ROOT / "templates" / "design-showcase-template.html"
+SOCIAL_DIR = Path.home() / ".operacao-ia" / "data" / "social-media"
+DESIGN_DST = SOCIAL_DIR / "DESIGN.md"
+SHOWCASE_DST = SOCIAL_DIR / "design-showcase.html"
+MARCA = Path.home() / ".operacao-ia" / "config" / "marca.json"
 
 TEMPLATES_DESC = [
     ("dark-mono",       "minimalista escuro, mono-fonte — tech, finance, B2B"),
@@ -70,12 +79,61 @@ def validate_templates():
         src = TEMPLATES / slug / "DESIGN.md"
         if not src.exists():
             missing.append(str(src))
+    if not SHOWCASE_TEMPLATE.exists():
+        missing.append(str(SHOWCASE_TEMPLATE))
     if missing:
-        print("❌ Templates de DESIGN.md faltando no repo:")
+        print("❌ Templates faltando no repo:")
         for m in missing:
             print(f"   • {m}")
         print("   O repo parece corrompido. Reclone com: gh repo clone zxmarketingdigital/social-media-agent")
         sys.exit(1)
+
+
+def emit_showcase_instructions(choice: str):
+    """
+    Imprime instruções para o Claude gerar o design-showcase.html adaptado
+    à marca do aluno, abrir no browser e pedir aprovação antes de avançar.
+    O DESIGN.md já foi gravado por copy_template() ou emit_custom_marker().
+    """
+    print("\n" + "=" * 60)
+    print("📐 SUBPASSO — Gerar Design Showcase (HTML pra aprovação)")
+    print("=" * 60)
+    print()
+    print(">>> CLAUDE: agora gere o design-showcase.html da marca do aluno.")
+    print()
+    print("1. Leia os 3 inputs:")
+    print(f"     • Template de referência:  {SHOWCASE_TEMPLATE}")
+    print(f"     • DESIGN.md do aluno:      {DESIGN_DST}")
+    print(f"     • marca.json:              {MARCA}  (nome, nicho, persona, tom, handles)")
+    print()
+    print("2. Adapte o template de referência mantendo a MESMA estrutura visual:")
+    print("     - Header (logo + subtitle + desc)")
+    print("     - Seção 01 Paleta (swatches em grid, com hex tokens)")
+    print("     - Seção 02 Tipografia (hierarquia: display, headline, body, label, metric)")
+    print("     - Seção 03 Mockups (4 slides carrossel + 2 reels + 1 thumb YouTube)")
+    print("     - Seção 04 Componentes (badge, métrica, CTA, antes/depois)")
+    print("     - Seção 05 Do's & Don'ts")
+    print("     - Footer")
+    print()
+    print("3. Substitua nos slides/reels/thumb:")
+    print("     • Logo / handle / @user      → marca.json (nome, handles.instagram)")
+    print("     • Cores / fontes / tokens    → DESIGN.md do aluno")
+    print("     • Hooks / headlines / copys  → ângulo do nicho do aluno (mantenha tom da marca)")
+    print("     • Métricas exemplo           → exemplos plausíveis pro nicho dele")
+    print()
+    print(f"4. Salve em: {SHOWCASE_DST}")
+    print()
+    print(f"5. Abra no browser:  open {SHOWCASE_DST}")
+    print()
+    print("6. Pergunte ao aluno: 'Aprovado? (s/n/ajustar)'")
+    print("     • s        → marca a etapa concluída e avança pra Etapa 3 (Transcrição).")
+    print("     • n        → volte ao menu da Etapa 2 (refazer escolha do design system).")
+    print("     • ajustar  → o aluno descreve o que quer mudar; você atualiza DESIGN.md +")
+    print("                  regenera o showcase, e pergunta de novo.")
+    print()
+    print(f"   Loop até aprovação. O template de referência tem ~785 linhas — use como")
+    print("   esqueleto exato de HTML/CSS, só ajustando tokens e copy.")
+    print()
 
 
 def main():
@@ -86,7 +144,8 @@ def main():
         emit_custom_marker()
     else:
         copy_template(choice)
-    print("\nPronto para a Etapa 3 (setup de transcrição: ElevenLabs + Whisper fallback).")
+    emit_showcase_instructions(choice)
+    print("\nApós aprovação do showcase pelo aluno, prossiga para a Etapa 3 (setup de transcrição: ElevenLabs + Whisper fallback).")
 
 
 if __name__ == "__main__":

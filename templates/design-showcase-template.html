@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZX LAB — Social Media Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #D97706;
+    --primary-light: #F59E0B;
+    --primary-bright: #FCD34D;
+    --primary-dark: #92400e;
+    --bg: #0D0D0D;
+    --bg-alt: #0A0A0A;
+    --surface: #1A1A1A;
+    --surface2: #222222;
+    --border: #2A2A2A;
+    --border-light: #333333;
+    --text-primary: #E2E8F0;
+    --text-secondary: #9CA3AF;
+    --text-muted: #6B7280;
+    --green: #4ADE80;
+    --red: #EF4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    background-image: linear-gradient(rgba(217,119,6,0.025) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(217,119,6,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    padding: 40px 20px 80px;
+  }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* HEADER */
+  .header { text-align: center; margin-bottom: 60px; padding: 40px 0; border-bottom: 1px solid var(--border); }
+  .header .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 4rem;
+    letter-spacing: 0.1em;
+    color: var(--primary-light);
+    text-shadow: 0 0 40px rgba(217,119,6,0.4);
+  }
+  .header .subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .header .desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    margin-top: 16px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* SECTION */
+  .section { margin-bottom: 80px; }
+  .section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    margin-bottom: 32px;
+    color: var(--text-primary);
+  }
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    margin: 40px auto;
+    max-width: 60%;
+  }
+
+  /* PALETA */
+  .palette { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+  .swatch {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .swatch:hover { border-color: rgba(217,119,6,0.3); transform: translateY(-3px); }
+  .swatch .color { height: 100px; }
+  .swatch .info { padding: 12px 16px; }
+  .swatch .name { font-weight: 700; font-size: 0.88rem; }
+  .swatch .hex { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); font-size: 0.78rem; margin-top: 4px; }
+
+  /* TIPOGRAFIA */
+  .type-row { padding: 24px 0; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: center; }
+  .type-meta { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+  .type-meta strong { color: var(--primary-light); display: block; margin-bottom: 4px; }
+  .type-display { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 4rem; letter-spacing: 0.1em; color: var(--primary-light); }
+  .type-headline { font-family: 'Inter', sans-serif; font-weight: 900; font-size: 2.5rem; line-height: 1.1; }
+  .type-body { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 1rem; }
+  .type-label { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
+  .type-metric { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 3rem; color: var(--primary-light); }
+
+  /* MOCKUPS */
+  .mockups { display: grid; grid-template-columns: 1fr; gap: 60px; }
+  .mockup-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+    align-items: flex-start;
+  }
+  .mockup-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .mockup-wrap { text-align: center; }
+
+  /* CARROSSEL SLIDE — 1080x1080 escalado pra 360px */
+  .slide {
+    width: 360px;
+    height: 360px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    padding: 26px 26px 40px;
+    display: flex;
+    flex-direction: column;
+  }
+  .slide.alt { background: var(--bg-alt); }
+  .slide .badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: rgba(217,119,6,0.15);
+    border: 1px solid rgba(217,119,6,0.3);
+    color: var(--primary-light);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .slide .handle {
+    position: absolute;
+    bottom: 14px;
+    right: 18px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+  }
+  .slide .dots {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 4px;
+  }
+  .slide .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+  .slide .dot.active { background: var(--primary); }
+
+  /* SLIDE 1 — capa */
+  .slide-cover { justify-content: center; align-items: center; text-align: center; }
+  .slide-cover .hero {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 2.4rem;
+    letter-spacing: 0.05em;
+    color: var(--primary-light);
+    margin-bottom: 16px;
+  }
+  .slide-cover .headline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+  .slide-cover .underline {
+    display: inline-block;
+    border-bottom: 4px solid var(--primary);
+    padding-bottom: 2px;
+  }
+  .slide-cover .desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 8px;
+  }
+
+  /* SLIDE 2 — conteúdo com métrica */
+  .slide-content .h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-top: 30px;
+    margin-bottom: 14px;
+  }
+  .slide-content .body {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .slide-content .metric-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 24px;
+    display: inline-block;
+    margin-top: auto;
+  }
+  .slide-content .metric-box .num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 2rem;
+    color: var(--primary-light);
+    line-height: 1;
+  }
+  .slide-content .metric-box .lbl {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  /* SLIDE 3 — antes/depois */
+  .slide-compare .h2 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-top: 24px;
+    margin-bottom: 18px;
+  }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; flex: 1; }
+  .compare-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 14px;
+    border-left: 3px solid var(--red);
+  }
+  .compare-card.good { border-left-color: var(--green); }
+  .compare-card .ico {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    color: var(--red);
+    font-size: 1.1rem;
+  }
+  .compare-card.good .ico { color: var(--green); }
+  .compare-card .lbl {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+  .compare-card .txt { font-size: 0.78rem; color: var(--text-primary); line-height: 1.4; }
+
+  /* SLIDE CTA — final */
+  .slide-cta { justify-content: center; align-items: center; text-align: center; }
+  .slide-cta .lbl {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    color: var(--primary-light);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 14px;
+  }
+  .slide-cta .h {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 24px;
+  }
+  .slide-cta .btn {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 12px 28px;
+    border-radius: 12px;
+    box-shadow: 0 0 60px rgba(217,119,6,0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* REEL — 9:16 escalado pra 220x390 */
+  .reel {
+    width: 220px;
+    height: 390px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    position: relative;
+    overflow: hidden;
+    padding: 50px 20px 70px;
+    display: flex;
+    flex-direction: column;
+  }
+  .reel.alt { background: var(--bg-alt); }
+  .reel .ig-header {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 36px;
+    background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent);
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.55rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .reel .ig-footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50px;
+    background: linear-gradient(0deg, rgba(0,0,0,0.7), transparent);
+    padding: 10px 14px;
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: flex-end;
+  }
+  .reel-hook {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--text-primary);
+    text-align: center;
+    margin: auto 0;
+    text-shadow: 0 0 30px rgba(217,119,6,0.3);
+  }
+  .reel-hook .hl {
+    color: var(--primary-light);
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 1px;
+  }
+  .reel-points { padding-top: 20px; }
+  .reel-point { display: flex; gap: 10px; margin-bottom: 18px; align-items: flex-start; }
+  .reel-point .num {
+    background: var(--primary);
+    color: #000;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .reel-point .txt { font-size: 0.85rem; color: var(--text-primary); font-weight: 700; line-height: 1.3; }
+
+  /* THUMBNAIL YOUTUBE — 16:9 escalado pra 480x270 */
+  .thumb {
+    width: 480px;
+    height: 270px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .thumb-left { padding: 24px; display: flex; flex-direction: column; justify-content: center; }
+  .thumb-headline {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    font-size: 2.1rem;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+  .thumb-headline .hl {
+    background: var(--primary);
+    color: #000;
+    padding: 0 6px;
+    display: inline-block;
+  }
+  .thumb-logo {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--primary-light);
+  }
+  .thumb-right {
+    background: var(--surface);
+    background-image: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid var(--border);
+  }
+  .thumb-right .face {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-align: center;
+    line-height: 1.6;
+  }
+
+  /* COMPONENTES */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+  .comp-card {
+    background: var(--surface);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.2s;
+  }
+  .comp-card:hover { border-color: rgba(217,119,6,0.3); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(217,119,6,0.1); }
+  .comp-name { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+  .comp-demo { display: flex; align-items: center; justify-content: center; min-height: 80px; padding: 16px; }
+
+  .badge-demo {
+    background: rgba(217,119,6,0.15);
+    border: 1px solid rgba(217,119,6,0.3);
+    color: var(--primary-light);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 8px 20px;
+    border-radius: 100px;
+  }
+  .metric-demo {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 24px 36px;
+    text-align: center;
+  }
+  .metric-demo .num { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 2.2rem; color: var(--primary-light); line-height: 1; }
+  .metric-demo .lbl { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 6px; }
+  .cta-demo {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #000;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 0.95rem;
+    padding: 16px 32px;
+    border-radius: 16px;
+    box-shadow: 0 0 60px rgba(217,119,6,0.25);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .ab-demo { display: flex; gap: 12px; width: 100%; }
+  .ab-card {
+    flex: 1;
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 16px;
+    border-left: 3px solid var(--red);
+  }
+  .ab-card.good { border-left-color: var(--green); }
+  .ab-card .ico { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--red); font-size: 1rem; }
+  .ab-card.good .ico { color: var(--green); }
+  .ab-card .txt { font-size: 0.78rem; color: var(--text-primary); margin-top: 6px; line-height: 1.4; }
+
+  /* DOS / DONTS */
+  .dos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .do-card { background: var(--surface); border: 1px solid var(--border-light); border-radius: 16px; padding: 28px; }
+  .do-card.do { border-left: 4px solid var(--green); }
+  .do-card.dont { border-left: 4px solid var(--red); }
+  .do-card .head { font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+  .do-card.do .head { color: var(--green); }
+  .do-card.dont .head { color: var(--red); }
+  .do-card ul { list-style: none; }
+  .do-card li { padding: 8px 0 8px 22px; position: relative; color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; }
+  .do-card.do li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-weight: 700; }
+  .do-card.dont li::before { content: '✗'; position: absolute; left: 0; color: var(--red); font-weight: 700; }
+
+  /* FOOTER */
+  .footer { text-align: center; padding: 40px 0; border-top: 1px solid var(--border); margin-top: 60px; }
+  .footer .meta { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--text-muted); letter-spacing: 0.08em; }
+  .footer .meta strong { color: var(--primary-light); }
+
+  @media (max-width: 768px) {
+    .type-row { grid-template-columns: 1fr; }
+    .thumb { width: 100%; max-width: 480px; }
+    .dos-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">ZX LAB</div>
+    <div class="subtitle">Social Media Design System · v1.0</div>
+    <div class="desc">Dark terminal · âmbar como único acento · JetBrains Mono pra técnico, Inter pra verbal · mesma DNA da LP ZX Control.</div>
+  </div>
+
+  <!-- PALETA -->
+  <div class="section">
+    <div class="section-title">// 01 — Cores</div>
+    <h2 class="section-h2">Paleta</h2>
+    <div class="palette">
+      <div class="swatch"><div class="color" style="background:#D97706"></div><div class="info"><div class="name">primary</div><div class="hex">#D97706</div></div></div>
+      <div class="swatch"><div class="color" style="background:#F59E0B"></div><div class="info"><div class="name">primary-light</div><div class="hex">#F59E0B</div></div></div>
+      <div class="swatch"><div class="color" style="background:#FCD34D"></div><div class="info"><div class="name">primary-bright</div><div class="hex">#FCD34D</div></div></div>
+      <div class="swatch"><div class="color" style="background:#92400e"></div><div class="info"><div class="name">primary-dark</div><div class="hex">#92400e</div></div></div>
+      <div class="swatch"><div class="color" style="background:#0D0D0D"></div><div class="info"><div class="name">background</div><div class="hex">#0D0D0D</div></div></div>
+      <div class="swatch"><div class="color" style="background:#0A0A0A"></div><div class="info"><div class="name">background-alt</div><div class="hex">#0A0A0A</div></div></div>
+      <div class="swatch"><div class="color" style="background:#1A1A1A"></div><div class="info"><div class="name">surface</div><div class="hex">#1A1A1A</div></div></div>
+      <div class="swatch"><div class="color" style="background:#222222"></div><div class="info"><div class="name">surface2</div><div class="hex">#222222</div></div></div>
+      <div class="swatch"><div class="color" style="background:#E2E8F0"></div><div class="info"><div class="name">text-primary</div><div class="hex">#E2E8F0</div></div></div>
+      <div class="swatch"><div class="color" style="background:#9CA3AF"></div><div class="info"><div class="name">text-secondary</div><div class="hex">#9CA3AF</div></div></div>
+      <div class="swatch"><div class="color" style="background:#6B7280"></div><div class="info"><div class="name">text-muted</div><div class="hex">#6B7280</div></div></div>
+      <div class="swatch"><div class="color" style="background:#4ADE80"></div><div class="info"><div class="name">green (✓)</div><div class="hex">#4ADE80</div></div></div>
+      <div class="swatch"><div class="color" style="background:#EF4444"></div><div class="info"><div class="name">red (✗)</div><div class="hex">#EF4444</div></div></div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TIPOGRAFIA -->
+  <div class="section">
+    <div class="section-title">// 02 — Tipografia</div>
+    <h2 class="section-h2">Hierarquia</h2>
+
+    <div class="type-row">
+      <div class="type-meta"><strong>display</strong>JetBrains Mono 700<br>0.1em letter-spacing<br>hero do carrossel</div>
+      <div class="type-display">ZX LAB</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta"><strong>headline</strong>Inter 900<br>line-height 1.1<br>hook de Reel, título de slide</div>
+      <div class="type-headline">Como construir uma agência de IA do zero aos R$50K/mês</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta"><strong>body</strong>Inter 400<br>line-height 1.5<br>corpo de slide, legenda</div>
+      <div class="type-body">Sem teoria solta, sem promessa vazia. Só o passo a passo que funciona — testado em 90 dias com Claude Code como base operacional.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta"><strong>label</strong>Inter 700 uppercase<br>0.08em letter-spacing<br>badges, labels técnicas</div>
+      <div class="type-label">SLIDE 3/5 · DIA 47/90 · LIVE</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta"><strong>metric</strong>JetBrains Mono 700<br>números gigantes<br>R$50K · 12.4K · 90</div>
+      <div class="type-metric">R$50K</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- MOCKUPS -->
+  <div class="section">
+    <div class="section-title">// 03 — Formatos</div>
+    <h2 class="section-h2">Mockups</h2>
+
+    <!-- CARROSSEL -->
+    <div class="mockup-row" style="margin-bottom: 50px;">
+      <div class="mockup-wrap">
+        <div class="mockup-label">CARROSSEL · 1080×1080 · CAPA</div>
+        <div class="slide slide-cover">
+          <span class="badge">SLIDE 1/5</span>
+          <div class="hero">ZX LAB</div>
+          <div class="headline">Construa sua agência de IA<br>aos <span class="underline">R$50K/mês</span></div>
+          <div class="desc">Em 90 dias, com Claude Code</div>
+          <div class="dots">
+            <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="handle">@rcastrodigital</div>
+        </div>
+      </div>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">CARROSSEL · SLIDE 2 (alt bg)</div>
+        <div class="slide slide-content alt">
+          <span class="badge">SLIDE 2/5</span>
+          <div class="h2">A maioria trava no <span style="color:var(--primary-light)">primeiro mês</span></div>
+          <div class="body">Sem processo, sem cliente piloto, sem entrega. O caminho técnico é o mais rápido — mas só se você tiver o método.</div>
+          <div class="metric-box">
+            <div class="num">87%</div>
+            <div class="lbl">desiste em 30 dias</div>
+          </div>
+          <div class="dots">
+            <span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="handle">@rcastrodigital</div>
+        </div>
+      </div>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">CARROSSEL · SLIDE 3 (antes/depois)</div>
+        <div class="slide slide-compare">
+          <span class="badge">SLIDE 3/5</span>
+          <div class="h2">Sem método<br><span style="color:var(--primary-light)">vs.</span> com ZX Control</div>
+          <div class="compare-grid">
+            <div class="compare-card">
+              <div class="ico">✗</div>
+              <div class="lbl">Sem método</div>
+              <div class="txt">Tutorial solto, prompt copiado, zero entrega real.</div>
+            </div>
+            <div class="compare-card good">
+              <div class="ico">✓</div>
+              <div class="lbl">Com método</div>
+              <div class="txt">Setup operacional, cliente piloto na semana 4.</div>
+            </div>
+          </div>
+          <div class="dots">
+            <span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+          <div class="handle">@rcastrodigital</div>
+        </div>
+      </div>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">CARROSSEL · SLIDE FINAL (CTA)</div>
+        <div class="slide slide-cta">
+          <span class="badge">SLIDE 5/5</span>
+          <div class="lbl">// PRÓXIMA TURMA</div>
+          <div class="h">Bora construir<br>a sua agência?</div>
+          <div class="btn">Acessar ZX Control →</div>
+          <div class="dots">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span>
+          </div>
+          <div class="handle">@rcastrodigital</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REEL + THUMBNAIL -->
+    <div class="mockup-row">
+      <div class="mockup-wrap">
+        <div class="mockup-label">REEL · 1080×1920 · HOOK (3s iniciais)</div>
+        <div class="reel">
+          <div class="ig-header"><span>@rcastrodigital</span><span>···</span></div>
+          <div class="reel-hook">A maior <span class="hl">mentira</span> sobre construir agência de IA</div>
+          <div class="ig-footer">♡ 12.4K · 384 comments</div>
+        </div>
+      </div>
+
+      <div class="mockup-wrap">
+        <div class="mockup-label">REEL · 1080×1920 · PONTOS</div>
+        <div class="reel alt">
+          <div class="ig-header"><span>@rcastrodigital</span><span>···</span></div>
+          <div class="reel-points">
+            <div class="reel-point"><div class="num">1</div><div class="txt">Não precisa saber código</div></div>
+            <div class="reel-point"><div class="num">2</div><div class="txt">Claude Code faz o pesado</div></div>
+            <div class="reel-point"><div class="num">3</div><div class="txt">90 dias até R$50K</div></div>
+          </div>
+          <div class="ig-footer">♡ 12.4K · 384 comments</div>
+        </div>
+      </div>
+
+      <div class="mockup-wrap" style="flex-basis: 100%; max-width: 500px;">
+        <div class="mockup-label">THUMBNAIL YOUTUBE · 1280×720</div>
+        <div class="thumb">
+          <div class="thumb-left">
+            <div class="thumb-headline">AGÊNCIA DE IA <span class="hl">EM 90 DIAS</span></div>
+          </div>
+          <div class="thumb-right">
+            <div class="face">[ FOTO<br>RAFAEL ]</div>
+          </div>
+          <div class="thumb-logo">ZX LAB</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- COMPONENTES -->
+  <div class="section">
+    <div class="section-title">// 04 — Componentes</div>
+    <h2 class="section-h2">Building Blocks</h2>
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-name">badge</div>
+        <div class="comp-demo"><div class="badge-demo">SLIDE 3/5</div></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">box de métrica</div>
+        <div class="comp-demo"><div class="metric-demo"><div class="num">R$50K</div><div class="lbl">por mês</div></div></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">cta bar</div>
+        <div class="comp-demo"><div class="cta-demo">Acessar agora →</div></div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-name">card antes/depois</div>
+        <div class="comp-demo">
+          <div class="ab-demo">
+            <div class="ab-card"><div class="ico">✗</div><div class="txt">Sem método</div></div>
+            <div class="ab-card good"><div class="ico">✓</div><div class="txt">Com ZX Control</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- DOS / DONTS -->
+  <div class="section">
+    <div class="section-title">// 05 — Diretrizes</div>
+    <h2 class="section-h2">Do's & Don'ts</h2>
+    <div class="dos-grid">
+      <div class="do-card do">
+        <div class="head">// FAZER</div>
+        <ul>
+          <li>Âmbar <strong>#D97706</strong> só pra acento: CTA, ícone, métrica, sublinhado</li>
+          <li>Inter pra tudo verbal · JetBrains Mono pra tudo técnico/numérico</li>
+          <li>Texto off-white <strong>#E2E8F0</strong> sobre fundo preto — nunca branco puro</li>
+          <li>Handle <strong>@rcastrodigital</strong> em Mono 24px no canto inferior direito</li>
+          <li>Logo <strong>ZX LAB</strong> sempre em JetBrains Mono</li>
+          <li>Badge "SLIDE N/N" no canto superior direito de toda página</li>
+          <li>Alternar fundo entre <strong>#0D0D0D</strong> e <strong>#0A0A0A</strong> em slides consecutivos</li>
+        </ul>
+      </div>
+      <div class="do-card dont">
+        <div class="head">// NÃO FAZER</div>
+        <ul>
+          <li>Fundo branco, claro, gradiente colorido ou foto sem overlay escuro</li>
+          <li>Texto branco puro <strong>#FFFFFF</strong> em corpo (é estridente)</li>
+          <li>Texto branco/claro sobre fundo âmbar — usar SEMPRE preto <strong>#000000</strong></li>
+          <li>Mais de 2 cores além de âmbar+branco (verde/vermelho só pra antes/depois)</li>
+          <li>Inter em número longo (R$50K, 12.400) — sempre Mono</li>
+          <li>Emoji decorativo — só ✓ ✗ → setas técnicas</li>
+          <li>Encher slide — máximo 1 hook + 1 corpo + 1 visual por slide</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="meta"><strong>// DESIGN.md</strong> · ~/.operacao-ia/data/social-media/DESIGN.md · ZX LAB v1.0</div>
+  </div>
+
+</div>
+</body>
+</html>

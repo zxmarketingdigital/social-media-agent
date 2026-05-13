@@ -104,6 +104,42 @@ Ou o aluno descreve cor/estilo/referencias e o Claude gera um DESIGN.md sob medi
 ### Instalacao
 Execute: `python3 setup/setup_design_system.py`
 
+### Subpasso — Design Showcase (aprovacao do aluno)
+
+Apos o script gravar o DESIGN.md, ele imprime instrucoes detalhadas para voce
+gerar o `design-showcase.html` da marca. Siga exatamente:
+
+1. **Leia 3 inputs:**
+   - `templates/design-showcase-template.html` (esqueleto HTML/CSS de 785 linhas — use como referencia exata de estrutura)
+   - `~/.operacao-ia/data/social-media/DESIGN.md` (paleta, tipografia, tokens do aluno)
+   - `~/.operacao-ia/config/marca.json` (nome, handle, nicho, tom, publico)
+
+2. **Adapte o template mantendo a MESMA estrutura visual** (header + 5 secoes + footer):
+   - Header com logo da marca + subtitle "Social Media Design System · v1.0"
+   - Secao 01 Paleta — swatches em grid com hex tokens do DESIGN.md
+   - Secao 02 Tipografia — display/headline/body/label/metric com as fontes do DESIGN.md
+   - Secao 03 Mockups — 4 slides de carrossel (capa, conteudo, antes-depois, CTA) + 2 reels (hook, pontos) + 1 thumb YouTube
+   - Secao 04 Componentes — badge, box metrica, CTA, card antes/depois
+   - Secao 05 Do's & Don'ts — diretrizes claras da marca
+   - Footer com path do DESIGN.md
+
+3. **Substitua nos mockups:**
+   - Logo / handle / @user → `marca.nome` e `marca.handles.instagram`
+   - Cores / fontes / variaveis CSS → tokens do DESIGN.md
+   - Hooks, headlines, copys → angulos plausiveis no nicho do aluno mantendo tom da marca
+   - Metricas exemplo → numeros realistas pro segmento dele
+
+4. **Salve em:** `~/.operacao-ia/data/social-media/design-showcase.html`
+
+5. **Abra no browser:** `open ~/.operacao-ia/data/social-media/design-showcase.html`
+
+6. **Pergunte ao aluno:** "Aprovado? (s/n/ajustar)"
+   - **s** → marca etapa concluida, avanca pra Etapa 3
+   - **n** → volta ao menu da Etapa 2 (refazer escolha do design system)
+   - **ajustar** → aluno descreve o que quer mudar; voce atualiza DESIGN.md + regenera o showcase + pergunta de novo
+
+Loop ate aprovacao. NAO avance pra Etapa 3 sem o aluno aprovar visualmente.
+
 ---
 
 ## Etapa 3 — Setup de Transcricao (ElevenLabs + Whisper fallback)
