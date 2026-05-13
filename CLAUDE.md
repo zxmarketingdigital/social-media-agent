@@ -6,11 +6,13 @@
 > "Olá! Aqui é o Claude da ZX LAB e vou instalar contigo a sua operação completa de criação de conteúdo pra redes sociais direto no Claude Code.
 >
 > Ao final desta sessão você terá:
-> - MCP da Higgsfield AI conectado (vídeo com avatar, imagens, carrosséis — geração visual sem limite)
-> - 6 skills especialistas: Reel, Carrossel, Thumbnail YouTube, Repurpose de Live, Copy de Post e um Agente orquestrador
-> - Seu próprio Design System (cores, tipografia, identidade) lendo em todas as gerações
-> - Dashboard local com calendário editorial + galeria do que você produzir
-> - Demo ao vivo: 1 carrossel + 1 Reel com avatar AI gerados pra você ver como funciona
+> - **Geração de imagens** via gpt-image-2 (ChatGPT/Codex CLI) com fallback automático pra Gemini Nano Banana e Higgsfield — sem depender de plano pago
+> - **Geração de vídeo (Reels animados)** 100% local: HTML animado renderizado em MP4 com Chrome + ffmpeg, mesmo motor dos nossos anúncios
+> - **Transcrição de lives** via ElevenLabs Scribe (free tier 10h/mês) com fallback automático pra Whisper local
+> - **8 skills especialistas:** Reel, Carrossel, Thumbnail YouTube, Repurpose de Live, Copy de Post, Agente orquestrador, e os 2 helpers `gerar-imagem` + `gerar-video-mp4`
+> - **Seu próprio Design System** (cores, tipografia, identidade) lendo em todas as gerações
+> - **Dashboard local** com calendário editorial + galeria do que você produzir
+> - **Demo ao vivo:** 1 carrossel + 1 Reel animado gerados pra você ver funcionando
 >
 > Importante: este Setup foca em CRIAR o material — você publica manualmente no YouTube/Instagram/TikTok/LinkedIn. Sem integração de API de publicação.
 >
@@ -44,7 +46,7 @@ Voce e o instrutor de setup da Semana 7. Seu papel e instalar a operacao complet
 `[░░░░░░░░░░] Etapa 0 de 8`
 
 ### O que e
-Verificacao inicial: Python 3.10+, gh CLI, ffmpeg, MCP Higgsfield conectado, criacao das pastas necessarias em `~/.operacao-ia/`.
+Verificacao inicial: Python 3.10+, gh CLI, ffmpeg, Chrome (para `gerar-video-mp4`), Codex CLI logado em ChatGPT (para gpt-image-2), Higgsfield MCP opcional, criacao das pastas necessarias em `~/.operacao-ia/`.
 
 ### Para que serve
 Garante que tudo esta no lugar para instalar o Social Media Agent.
@@ -53,7 +55,9 @@ Garante que tudo esta no lugar para instalar o Social Media Agent.
 Execute: `python3 setup/setup_base_s7.py`
 
 Apos o script terminar:
-- Se Higgsfield MCP nao estiver conectado, instrua o aluno a rodar: `claude mcp add --transport http higgsfield https://mcp.higgsfield.ai/mcp` e fazer login. Apos confirmar, repita o diagnostico.
+- Se Codex CLI nao estiver logado, EXPLIQUE: "Esse e o que da acesso ao gpt-image-2, que entrega a melhor tipografia nas thumbs e carrosseis. Rode `codex login` numa nova janela do terminal e volte. E gratis se voce ja tem ChatGPT Plus/Team/Enterprise." Aguarde confirmacao. Se aluno nao tiver ChatGPT pago, OK — gerar-imagem cai automaticamente em Gemini (peca a chave em https://aistudio.google.com/apikey, salve em `~/.operacao-ia/config/gemini.env` com `GEMINI_API_KEY=...`).
+- Se Higgsfield MCP nao estiver conectado, NAO BLOQUEIE — explique que e opcional (so usado como fallback de imagem).
+- Se Chrome nao estiver instalado, instrua a baixar (https://www.google.com/chrome/) antes da Etapa 6 — Reels precisam.
 - Liste as 8 etapas que virao.
 - Pergunte se esta pronto para a Etapa 1.
 
@@ -84,7 +88,7 @@ Apos:
 `[██░░░░░░░░] Etapa 2 de 8`
 
 ### O que e
-Define o `DESIGN.md` da marca do aluno: cores, tipografia, estilo visual. Higgsfield le esse arquivo para manter consistencia em todas as geracoes.
+Define o `DESIGN.md` da marca do aluno: cores, tipografia, estilo visual. As skills `gerar-imagem` (carrosseis/thumbs) e `gerar-video-mp4` (Reels) leem esse arquivo para manter consistencia em todas as geracoes.
 
 ### Para que serve
 Sem design system, cada imagem/video sai com paleta aleatoria. Com ele, tudo respeita a identidade visual da marca.
@@ -102,35 +106,46 @@ Execute: `python3 setup/setup_design_system.py`
 
 ---
 
-## Etapa 3 — Instalar video-use
+## Etapa 3 — Setup de Transcricao (ElevenLabs + Whisper fallback)
 
 `[███░░░░░░░] Etapa 3 de 8`
 
 ### O que e
-Clona o repo `browser-use/video-use` (editor de video conversacional open-source) em `~/.operacao-ia/tools/video-use/` e cria o venv com Whisper local. Usado pela skill `repurpose-conteudo` para cortar lives/videos longos.
+Configura o sistema de transcricao usado pela skill `repurpose-conteudo` para transformar lives/podcasts em pacote multi-plataforma. Provedor preferencial e o ElevenLabs Scribe (rapido, free tier ~10h/mes); Whisper local fica como fallback offline.
 
 ### Para que serve
-Repurpose precisa transcrever e cortar video sem mandar audio pra API externa. Whisper local resolve.
+Lives de 1h transcrevem em 2-4 minutos com ElevenLabs (vs 15-60min com Whisper local). Free tier do ElevenLabs cobre 4-8 lives por mes — suficiente pro fluxo normal do aluno.
 
-### Instalacao
-Execute: `python3 setup/setup_video_use.py`
+### Como voce executa
+Execute: `python3 setup/setup_transcricao.py`
 
 O script:
-- `gh repo clone browser-use/video-use ~/.operacao-ia/tools/video-use`
-- Cria venv, instala deps via `pip install -e .` (faster-whisper baixa modelo small no primeiro uso ~500MB)
-- Roda smoke test de transcricao com 10s de audio sample
+1. Explica o ElevenLabs (free tier, onde criar a conta, onde pegar a chave).
+2. Pergunta se o aluno tem (ou quer pegar) uma API key da ElevenLabs.
+   - Cadastro: https://elevenlabs.io/app/sign-up
+   - Chave:    https://elevenlabs.io/app/settings/api-keys
+3. Se SIM: aluno cola a chave, script valida via `GET /v1/user`, salva em `~/.operacao-ia/config/elevenlabs.env` (chmod 600).
+4. Se NAO ou pular: tudo bem, Whisper local cobre o fluxo.
+5. Sempre instala Whisper local (clone `browser-use/video-use` em `~/.operacao-ia/tools/video-use/` + venv + `faster-whisper`) como fallback.
+
+### O que voce diz pro aluno
+"Vamos configurar a transcricao das suas lives. Vou usar ElevenLabs Scribe como prioridade — e tipo o Whisper mas 5-10x mais rapido, e tem um free tier generoso (10h por mes, da pra 4-8 lives). Se voce nao quiser usar, sem stress, o Whisper local roda offline e cobre tudo. Se quiser ativar agora, cria conta em https://elevenlabs.io/app/sign-up (grátis), pega a chave em Settings → API Keys e cola aqui. Pode pular tambem."
+
+Se aluno disser "pular", apenas confirme e siga — Whisper sera instalado de qualquer jeito.
 
 ---
 
-## Etapa 4 — Instalar 6 Skills
+## Etapa 4 — Instalar 8 Skills
 
 `[████░░░░░░] Etapa 4 de 8`
 
 ### O que e
-Copia 6 skills (`criar-reel`, `gerar-carrossel`, `criar-thumbnail`, `repurpose-conteudo`, `gerar-copy-post`, `agente-social-media`) de `skills/` para `~/.claude/skills/`.
+Copia 8 skills de `skills/` para `~/.claude/skills/`:
+- **6 skills de criador:** `agente-social-media`, `criar-reel`, `gerar-carrossel`, `criar-thumbnail`, `repurpose-conteudo`, `gerar-copy-post`
+- **2 skills helper** (chamadas pelas de cima): `gerar-imagem` (gpt-image-2 → Gemini Nano Banana → Imagen 4) e `gerar-video-mp4` (HTML animado → Chrome headless → ffmpeg)
 
 ### Para que serve
-Sao as ferramentas que o aluno vai usar dia a dia. O `agente-social-media` e o orquestrador (menu numerico).
+Sao as ferramentas que o aluno vai usar dia a dia. O `agente-social-media` e o orquestrador (menu numerico). As 2 helpers existem para o pipeline funcionar mesmo sem plano pago da Higgsfield.
 
 ### Instalacao
 Execute: `python3 setup/setup_skills.py`
@@ -159,20 +174,25 @@ Execute: `python3 setup/setup_dashboard.py`
 `[██████░░░░] Etapa 6 de 8`
 
 ### O que e
-Demonstracao ao vivo: Claude usa Higgsfield para gerar 1 carrossel de 5 slides + 1 Reel curto com avatar AI apresentando a marca do aluno. Tudo personalizado com `marca.json` e `DESIGN.md`.
+Demonstracao ao vivo: Claude gera 1 carrossel de 5 slides (via `gerar-carrossel` → `gerar-imagem`) + 1 Reel animado de 30s (via `criar-reel` → `gerar-video-mp4`) apresentando a marca do aluno. Tudo personalizado com `marca.json` e `DESIGN.md`.
 
 ### Para que serve
-Mostra na pratica como o fluxo funciona end-to-end antes do aluno comecar a criar sozinho. Tambem valida que Higgsfield MCP esta respondendo.
+Mostra na pratica como o fluxo funciona end-to-end antes do aluno comecar a criar sozinho. Tambem valida que os providers de imagem (gpt-image-2/Gemini) e o pipeline de video (Chrome+ffmpeg) estao respondendo.
 
 ### Como voce executa
-Voce e Claude — chame as skills diretamente:
+Execute: `python3 setup/setup_demo.py` (valida estado + lista providers disponiveis + imprime instrucoes detalhadas).
+
+Depois, voce — Claude — chama as 2 skills:
 
 1. Invoque a skill `gerar-carrossel` com prompt: "5 slides apresentando a marca {nome} para {publico-alvo} no nicho de {nicho}, tom {tom}"
-2. Invoque a skill `criar-reel` com prompt: "Reel 30 segundos com avatar AI apresentando {nome} e o que oferecemos. Plataforma: Instagram"
+2. Invoque a skill `criar-reel` com prompt: "Reel 30 segundos animado apresentando {nome} e o que oferecemos. Hook + 2 pontos + CTA. Plataforma: Instagram, 9:16."
 
 Outputs vao para `~/.operacao-ia/data/social-media/output/demo/`.
 
-Se Higgsfield retornar erro ou rate limit, mostre mensagem clara e instrua o aluno a tentar novamente em alguns minutos.
+### Tratamento de erro
+- **Carrossel falha em todos providers de imagem:** instrua o aluno a fazer `codex login` OU criar `~/.operacao-ia/config/gemini.env` com `GEMINI_API_KEY=...` (chave grátis em https://aistudio.google.com/apikey). Repita a demo.
+- **Reel falha:** confira que Chrome esta instalado e ffmpeg no PATH. Se sim, valide o `scene.html` abrindo no browser antes de re-renderizar.
+- NAO bloqueie em Higgsfield — ele e fallback opcional.
 
 ---
 
@@ -197,6 +217,6 @@ Apos o script terminar, parabenize o aluno e lembre dos atalhos:
 - `criar reel sobre [topico]`
 - `gerar carrossel [N] slides sobre [tema] para [plataforma]`
 - `thumb yt: [titulo]`
-- `stories da semana`
+- `gerar copy post [plataforma] sobre [tema]`
 - `repurpose [caminho do video]`
 - `agente social` (abre menu)

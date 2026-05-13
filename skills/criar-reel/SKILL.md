@@ -1,13 +1,17 @@
 ---
 name: criar-reel
-description: "Gera Reel/Short/TikTok 9:16 (ou Reel feed 4:5) com hook + corpo + CTA. Usa Higgsfield AI para gerar o vídeo (avatar AI opcional) lendo marca.json e DESIGN.md para manter identidade. Use SEMPRE que o aluno disser: criar reel, novo reel, gerar reel, reel sobre, criar shorts, novo shorts, criar tiktok, video curto, reel instagram, criativo reels."
+description: "Gera Reel/Short/TikTok 9:16 (ou Reel feed 4:5) com hook + corpo + CTA. Roteiro escrito pelo Claude, vídeo animado gerado via skill `gerar-video-mp4` (Chrome headless + ffmpeg) no estilo dos anúncios ZX LAB. Lê marca.json e DESIGN.md para manter identidade. Use SEMPRE que o aluno disser: criar reel, novo reel, gerar reel, reel sobre, criar shorts, novo shorts, criar tiktok, video curto, reel instagram, criativo reels."
 model: sonnet
 effort: medium
 ---
 
 # Criar Reel/Short/TikTok
 
-Skill para gerar 1 vídeo vertical curto pronto pra publicar no Instagram Reels, TikTok ou YouTube Shorts.
+Skill para gerar 1 vídeo vertical curto pronto pra publicar no Instagram Reels, TikTok ou YouTube Shorts. Usa a mesma engine que produz os anúncios do ZX LAB (HTML animado → MP4 via Chrome headless + ffmpeg) — não depende de plano pago da Higgsfield.
+
+## Por que mudou (importante)
+
+Versões antigas dessa skill chamavam o Higgsfield para gerar vídeo. **O plano grátis da Higgsfield não gera vídeo** — só imagem. Para evitar travar o aluno num upgrade, a geração agora é local via `gerar-video-mp4` (skill instalada no mesmo Setup 7). Se o aluno tiver Higgsfield pago e quiser usar avatar AI real, a seção "Modo Higgsfield (opcional)" no final mostra como alternar.
 
 ## Carregamento de contexto
 
@@ -25,8 +29,7 @@ Coletar do aluno (uma pergunta por vez se faltarem):
 1. **Tema do Reel** — frase curta, ex: "como usar IA no atendimento de pequenos negócios"
 2. **Plataforma** — `instagram`, `tiktok`, `shorts`. Default: `instagram` (afeta CTA e hashtags)
 3. **Duração** — `15s`, `30s`, `60s`. Default: `30s`
-4. **Aspect ratio** — `9:16` (default) ou `4:5` (feed)
-5. **Avatar AI?** — `sim`/`não`. Default: `sim` (usa Higgsfield avatar). Se `não`, gera Reel animado com texto + b-roll AI.
+4. **Aspect ratio** — `9:16` (default, 1080×1920) ou `4:5` (feed, 1080×1350)
 
 ## Fluxo
 
@@ -45,28 +48,53 @@ Tom = `marca.tom`. Linguagem adaptada ao `marca.publico`.
 
 Mostre o roteiro ao aluno e peça confirmação antes de gerar o vídeo.
 
-### 2. Geração via Higgsfield
+### 2. Montar HTML animado (estilo anúncio ZX LAB)
 
-Após aprovação, chame as tools do MCP Higgsfield (`mcp__higgsfield__*`).
+Crie um diretório de trabalho em `~/.operacao-ia/data/social-media/output/reels/_render/<slug>/` com `frames/`, `out/`, `assets/`.
 
-**Se avatar AI = sim:**
-- Tool a usar: `generate_avatar_video` (ou equivalente — confira tools disponíveis em `claude mcp list` ou tente `generate_video` com parâmetro `avatar=true`)
-- Parâmetros:
-  - `script`: o roteiro completo (hook + corpo + CTA), formatado pro avatar falar
-  - `aspect_ratio`: conforme escolha
-  - `duration_seconds`: conforme escolha
-  - `style_prompt`: prompt visual baseado em DESIGN.md (extrair seção "Para Higgsfield")
-  - `voice`: pedir preferência do aluno (masculina/feminina/neutra) — default neutra
+Crie `scene.html` seguindo as regras OBRIGATÓRIAS da skill `gerar-video-mp4`:
 
-**Se avatar AI = não:**
-- Tool: `generate_video` (ou similar)
-- Parâmetros:
-  - `prompt`: descrição visual do Reel (b-roll genérico relacionado ao tema + texto on-screen com o roteiro)
-  - `aspect_ratio`, `duration_seconds`, `style_prompt` idem
+- Dimensões fixas no `html, body`: `1080x1920` (9:16) ou `1080x1350` (4:5).
+- Fontes Inter + JetBrains Mono via Google Fonts (ou as fontes do DESIGN.md se diferentes).
+- Paleta lida do DESIGN.md (`marca.cores.primary`, `accent`, `bg`, etc).
+- Função `window.SET_TIME(t)` controla **TUDO** via JS (opacity/transform). Sem CSS keyframes/transitions — não funcionam em render headless.
 
-### 3. Output
+Estrutura visual sugerida (3-4 cenas):
 
-Salve em:
+| Cena | Tempo | O que aparece |
+|---|---|---|
+| 1 — Hook | 0–3s | Texto grande (Inter 800/900) com a frase do hook, fade-in + slide-up. Logo da marca canto superior. |
+| 2 — Pontos | 3s até duração-3s | Bullets aparecendo um por um (stagger 400-600ms), com underline animado em cor accent. |
+| 3 — CTA | últimos 3s | CTA grande + handle/@ da marca + microcopy ("salva e segue"). |
+| 4 — End card | últimos 0.5s | Frame estático com logo e cor primária pra fechar. |
+
+**Anti-AI-slop:** se houver mockup/print real relacionado ao tema em `~/.operacao-ia/data/social-media/assets/`, usar como background ou frame em vez de inventar UI com CSS. Copiar pra `assets/` do projeto antes de referenciar.
+
+### 3. Renderizar via `gerar-video-mp4`
+
+A skill `gerar-video-mp4` é um **runbook** — não um helper CLI parametrizado. Você (Claude) lê o SKILL.md dela e gera `render.mjs` + comando ffmpeg AD-HOC dentro do diretório do projeto, com os valores corretos hardcoded para esta cena. Constantes que precisam ser injetadas no `render.mjs`:
+
+| Constante | Valor pra Reel 9:16 | Valor pra Reel 4:5 |
+|---|---|---|
+| `W` (width) | `1080` | `1080` |
+| `H` (height) | `1920` | `1350` |
+| `FPS` | `25` (padrão) ou `60` (se aluno pedir suave) | idem |
+| `DURATION` | `15`, `30` ou `60` conforme escolha do aluno | idem |
+| `CHROME_PATH` | resultado de `Path('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome').exists()` ou `shutil.which('google-chrome')`/`'chromium'` | idem |
+| `FFMPEG` | `command -v ffmpeg` (NUNCA hardcodar `/opt/homebrew/Cellar/...`) | idem |
+
+Antes de renderizar, **smoke test obrigatório**:
+1. Abrir `scene.html` no Chrome local: `open scene.html` — confirmar visualmente que animação roda e `window.SET_TIME(t)` controla os elementos.
+2. Validar que `bun` está instalado (`shutil.which('bun')`); se não, instruir o aluno: `brew install bun` antes de prosseguir.
+3. Validar espaço em disco: 1500 frames PNG 1080×1920 ≈ 300-600MB; abortar se `df -h .` mostrar <2GB livres.
+
+A skill `gerar-video-mp4` produz `out/video.mp4` (não `out/reel.mp4` — atenção ao nome). Depois do render, limpar `frames/` para não acumular GBs de PNG entre Reels.
+
+Tempo típico: ~5-15s de render para 30s de vídeo num M1.
+
+### 4. Salvar no destino final
+
+Mover `out/video.mp4` para o destino final renomeado:
 ```
 ~/.operacao-ia/data/social-media/output/reels/YYYY-MM-DD_<slug-do-tema>.mp4
 ~/.operacao-ia/data/social-media/output/reels/YYYY-MM-DD_<slug-do-tema>.copy.txt
@@ -75,19 +103,19 @@ Salve em:
 Onde `<slug-do-tema>` é o tema em kebab-case (`como-usar-ia-no-atendimento`).
 
 `.copy.txt` contém:
-- Roteiro completo
-- Legenda sugerida pra postagem (chame a skill `gerar-copy-post` internamente se quiser)
+- Roteiro completo (hook + corpo + CTA)
+- Legenda sugerida pra postagem (chame `gerar-copy-post` internamente se quiser)
 - Hashtags sugeridas (8-12, mix de nicho + amplas)
 
-### 4. Atualizar galeria
+### 5. Atualizar galeria
 
-Leia `~/.operacao-ia/data/social-media/gallery.json` (criado pelo setup_dashboard.py com `{"items": []}`), faça append em `data["items"]` e escreva de volta. Item:
+Leia `~/.operacao-ia/data/social-media/gallery.json` (criado pelo `setup_dashboard.py` com `{"items": []}`), faça append em `data["items"]` e escreva de volta. Item:
 
 ```json
-{ "type": "reel", "title": "<tema>", "path": "output/reels/...", "platform": "instagram", "created_at": "<ISO>" }
+{ "type": "reel", "title": "<tema>", "path": "output/reels/...", "platform": "instagram", "engine": "gerar-video-mp4", "created_at": "<ISO>" }
 ```
 
-### 5. Resumo final
+### 6. Resumo final
 
 Mostre ao aluno:
 - Path do MP4 gerado
@@ -95,15 +123,24 @@ Mostre ao aluno:
 - Sugestão de horário pra publicar baseado no nicho (manhã pra B2B, fim de tarde pra B2C)
 - Comando pra abrir no Finder: `open ~/.operacao-ia/data/social-media/output/reels/`
 
-## Tratamento de erro Higgsfield
+## Modo Higgsfield (opcional — só se aluno tiver plano pago)
 
-- **Rate limit:** mostre mensagem clara ("Higgsfield atingiu o limite — tente em 5min ou faça upgrade do plano"). Não tente retry automático mais de 1x.
-- **Auth expirou:** instrua `claude mcp` re-login.
-- **Tool não encontrada:** liste as tools disponíveis com `claude mcp list` e adapte o nome no próximo retry.
-- **Conteúdo bloqueado:** revise o prompt removendo termos sensíveis e tente de novo.
+Se o aluno explicitamente disser "usar Higgsfield" ou "avatar AI real", e o MCP `higgsfield` estiver conectado:
+
+- Pergunte o plano dele primeiro: "Plano grátis não gera vídeo, só imagem. Você tem plano pago da Higgsfield?"
+- Se sim, chame `mcp__higgsfield__generate_video` com `script`, `aspect_ratio`, `duration_seconds`, `style_prompt` extraído do DESIGN.md.
+- Se não, redirecione pro fluxo padrão (HTML → gerar-video-mp4) sem cobrar upgrade.
+
+## Tratamento de erro
+
+- **Chrome não encontrado:** instrua a baixar de google.com/chrome — `gerar-video-mp4` não roda sem ele.
+- **ffmpeg não encontrado:** `brew install ffmpeg`.
+- **Render lento (>2min):** confirme que `gerar-video-mp4` está usando o pipeline puppeteer (não Playwright completo) e que `fps=25` (padrão). Suba pra 60 só se aluno pedir.
+- **HTML quebrado:** valide com `open scene.html` no browser antes de renderizar — se animação não roda no browser, também não vai renderizar.
 
 ## Não fazer
 
-- Não use Puppeteer, ffmpeg, ou qualquer engine local para o vídeo final — sempre Higgsfield.
+- **Não dependa de plano pago da Higgsfield** — o fluxo padrão deve ser 100% local.
 - Não suba pra YouTube/IG/TikTok automaticamente — esse Setup é manual.
-- Não invente API keys — Higgsfield autentica via MCP no Claude Code.
+- Não use CSS keyframes pra animação — só `window.SET_TIME(t)` em JS (regra do `gerar-video-mp4`).
+- Não invente API keys — `gerar-video-mp4` roda local sem chave nenhuma.

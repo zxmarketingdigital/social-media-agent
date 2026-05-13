@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Setup 7 — Etapa 4: Instalar 6 Skills.
+Setup 7 — Etapa 4: Instalar 8 Skills.
 
-Copia 6 SKILL.md para ~/.claude/skills/.
+Copia 8 SKILL.md para ~/.claude/skills/.
 Idempotente: skills idênticas são puladas; modificadas localmente recebem backup antes de atualizar.
 """
 import datetime as dt
@@ -22,6 +22,8 @@ EXPECTED = [
     "criar-thumbnail",
     "repurpose-conteudo",
     "gerar-copy-post",
+    "gerar-imagem",
+    "gerar-video-mp4",
 ]
 
 

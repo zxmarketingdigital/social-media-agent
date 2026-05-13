@@ -52,7 +52,13 @@ Substitua `{nome da marca}` pelo `marca.nome` lido do JSON.
 
 ## Regras
 
-- Nunca chame Higgsfield diretamente — sempre invoque a skill especialista.
+- Nunca chame Higgsfield, gpt-image-2 ou ffmpeg diretamente — sempre invoque a skill especialista (que internamente usa `gerar-imagem` ou `gerar-video-mp4`).
 - Se o aluno descrever direto o que quer (ex: "criar reel sobre marketing"), pule o menu e vá direto pra skill.
 - Lembre o aluno periodicamente que o material gerado fica em `~/.operacao-ia/data/social-media/output/`.
 - Não fique no menu eternamente — após cada criação, pergunte: "Quer fazer mais alguma coisa ou encerrar?".
+
+## Engines em uso (FYI — não precisa explicar pro aluno a menos que pergunte)
+
+- **Imagens** (carrossel, thumbnail, stories): skill `gerar-imagem` → gpt-image-2 (Codex CLI / ChatGPT) → Gemini Nano Banana → Imagen 4.
+- **Vídeo** (Reel/Short/TikTok): skill `gerar-video-mp4` → Chrome headless (puppeteer) + ffmpeg, render local. Higgsfield video só se aluno tiver plano pago (free não gera vídeo).
+- **Transcrição** (repurpose): ElevenLabs Scribe preferido (free tier — minutos variam por plano, ver pricing oficial) → Whisper local fallback automático.

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
 Setup 7 — Etapa 0: Diagnóstico e estrutura de pastas.
-Valida pré-requisitos (Python, gh, ffmpeg), checa Higgsfield MCP, cria diretórios.
+Valida pré-requisitos (Python, gh, ffmpeg, Chrome), checa Codex/ChatGPT CLI
+(image2 → gerar-imagem), Higgsfield MCP (opcional, imagens fallback), cria diretórios.
 """
 import json
 import platform
@@ -30,10 +31,10 @@ ETAPAS = [
     "E0  Boas-vindas + Diagnóstico",
     "E1  Identidade da Marca",
     "E2  Design System",
-    "E3  Instalar video-use (Whisper local)",
-    "E4  Instalar 6 Skills",
+    "E3  Setup de Transcrição (ElevenLabs + Whisper fallback)",
+    "E4  Instalar 8 Skills",
     "E5  Dashboard Local",
-    "E6  Demo de Geração (carrossel + reel)",
+    "E6  Demo de Geração (carrossel + reel animado MP4)",
     "E7  Finalização",
 ]
 
@@ -72,7 +73,8 @@ def check_claude_cli():
 
 
 def check_higgsfield_mcp():
-    """Verifica se higgsfield aparece em `claude mcp list`."""
+    """Verifica higgsfield MCP. NÃO bloqueia (geração de vídeo agora é via gerar-video-mp4,
+    e imagens preferem gpt-image-2 via Codex CLI — Higgsfield vira fallback opcional)."""
     try:
         result = subprocess.run(
             ["claude", "mcp", "list"],
@@ -80,18 +82,66 @@ def check_higgsfield_mcp():
         )
         out = (result.stdout + result.stderr).lower()
         if "higgsfield" in out and "connected" in out:
-            print("✅ Higgsfield MCP conectado")
-            return True
-        if "higgsfield" in out:
-            print("⚠️  Higgsfield MCP listado mas não conectado — faça login antes de prosseguir")
-            return False
-        print("❌ Higgsfield MCP não conectado")
-        print("    Conecte com:")
-        print("    claude mcp add --transport http higgsfield https://mcp.higgsfield.ai/mcp")
-        return False
+            print("✅ Higgsfield MCP conectado (fallback de imagens disponível)")
+        elif "higgsfield" in out:
+            print("⚠️  Higgsfield MCP listado mas não conectado — sem fallback de imagens AI")
+        else:
+            print("ℹ️  Higgsfield MCP não conectado (opcional — só usado como fallback de imagens)")
+            print("    Para conectar (opcional): claude mcp add --transport http higgsfield https://mcp.higgsfield.ai/mcp")
     except Exception as e:
         print(f"⚠️  Não foi possível verificar MCPs: {e}")
-        return True  # não bloqueia — aluno pode estar offline temporário
+    return True  # NUNCA bloqueia
+
+
+def check_codex_or_chatgpt_cli():
+    """Image gen preferida usa gpt-image-2 via Codex CLI (login ChatGPT). Não bloqueia."""
+    if shutil.which("codex"):
+        try:
+            result = subprocess.run(
+                ["codex", "login", "status"], capture_output=True, text=True, timeout=10
+            )
+            out = (result.stdout + result.stderr).lower()
+            if "logged in" in out or "chatgpt" in out:
+                print("✅ Codex CLI logado em ChatGPT (gpt-image-2 disponível para imagens)")
+                return True
+            print("⚠️  Codex CLI instalado mas não logado em ChatGPT")
+            print("    Para ativar gpt-image-2: codex login")
+            return True
+        except Exception:
+            print("⚠️  Codex CLI presente mas erro ao consultar status — pode estar disponível")
+            return True
+    print("ℹ️  Codex CLI não encontrado (opcional — usado pra gpt-image-2)")
+    print("    Instalar (opcional): npm install -g @openai/codex   ou   pip install openai-codex")
+    print("    Sem Codex, gerar-imagem cai automaticamente em Gemini Nano Banana (chave Gemini opcional).")
+    return True  # nunca bloqueia
+
+
+def check_chrome():
+    """gerar-video-mp4 usa Chrome headless via puppeteer. Não bloqueia."""
+    candidates = [
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Chromium.app/Contents/MacOS/Chromium",
+    ]
+    for path in candidates:
+        if Path(path).exists():
+            print("✅ Chrome/Chromium instalado (gerar-video-mp4 OK)")
+            return True
+    if shutil.which("google-chrome") or shutil.which("chromium"):
+        print("✅ Chrome no PATH (gerar-video-mp4 OK)")
+        return True
+    print("⚠️  Chrome/Chromium não encontrado — necessário para gerar-video-mp4 (Reels).")
+    print("    Instale Chrome (https://www.google.com/chrome/) antes da Etapa 6.")
+    return True  # não bloqueia — só Reels precisam
+
+
+def check_bun():
+    """gerar-video-mp4 usa puppeteer-core via Bun. Não bloqueia."""
+    if shutil.which("bun"):
+        print("✅ Bun instalado (puppeteer/gerar-video-mp4 OK)")
+        return True
+    print("⚠️  Bun não encontrado — necessário para gerar-video-mp4 rodar puppeteer-core.")
+    print("    Instale com: brew install bun  (antes da Etapa 6, só Reels precisam)")
+    return True  # não bloqueia — só Reels precisam
 
 
 def check_prior_setup():
@@ -136,6 +186,9 @@ def main():
         check_gh(),
         check_claude_cli(),
         check_ffmpeg(),
+        check_chrome(),
+        check_bun(),
+        check_codex_or_chatgpt_cli(),
         check_higgsfield_mcp(),
         check_prior_setup(),
     ]

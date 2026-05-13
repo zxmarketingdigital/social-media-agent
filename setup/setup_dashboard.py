@@ -100,10 +100,10 @@ def render(marca):
   <section>
     <h2>Comandos Rápidos</h2>
     <div class="commands">
-      <div class="cmd"><code>criar reel sobre [tópico]</code><small>Reel/Short 9:16 com avatar AI ou animação</small></div>
+      <div class="cmd"><code>criar reel sobre [tópico]</code><small>Reel/Short 9:16 animado em MP4 (render local)</small></div>
       <div class="cmd"><code>gerar carrossel 7 slides sobre [tema] para linkedin</code><small>5-10 slides + copy + imagens</small></div>
       <div class="cmd"><code>thumb yt: [título]</code><small>3 variantes de thumbnail 1280×720</small></div>
-      <div class="cmd"><code>stories da semana</code><small>7 stories 9:16 com tema diário</small></div>
+      <div class="cmd"><code>gerar copy post [plataforma] sobre [tema]</code><small>Legenda + hashtags + CTA por plataforma</small></div>
       <div class="cmd"><code>repurpose [caminho do vídeo]</code><small>Live longa → corte + Reels + carrossel + copy</small></div>
       <div class="cmd"><code>agente social</code><small>Menu com todas as opções</small></div>
     </div>

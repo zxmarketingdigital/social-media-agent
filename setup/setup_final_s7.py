@@ -46,7 +46,7 @@ def show_summary():
     print("   • criar reel sobre [tópico]")
     print("   • gerar carrossel [N] slides sobre [tema] para [plataforma]")
     print("   • thumb yt: [título]")
-    print("   • stories da semana")
+    print("   • gerar copy post [plataforma] sobre [tema]")
     print("   • repurpose [caminho do vídeo longo]")
     print("   • agente social  (abre menu com todas as opções)")
     print("\n📂 Outputs gerados ficam em:")

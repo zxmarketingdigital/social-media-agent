@@ -19,11 +19,11 @@ Vídeo único (aula MasterClass) que apresenta todo o Setup. Será hospedado no 
 ### 3. Demo ao vivo (2:30 - 9:00)
 Mostrar 3 comandos em sequência:
 
-- `criar reel sobre [tema do nicho do criador]` — gerar com avatar AI, mostrar output
-- `gerar carrossel 7 slides sobre [tema] para linkedin` — mostrar copy + imagens AI
-- `thumb yt: [título]` — 3 variantes
+- `criar reel sobre [tema do nicho do criador]` — Reel animado em MP4 (HTML → Chrome → ffmpeg), 100% local. Mostrar como roda sem mexer no After Effects.
+- `gerar carrossel 7 slides sobre [tema] para linkedin` — copy do Claude + imagens via `gerar-imagem` (gpt-image-2 com ChatGPT Plus, fallback Gemini)
+- `thumb yt: [título]` — 3 variantes via `gerar-imagem`
 
-Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.json` define a voz, custo aproximado por geração.
+Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.json` define a voz, custo zero do Reel animado (renderiza local), e custo praticamente zero das imagens (gpt-image-2 usa a assinatura ChatGPT que o aluno provavelmente já tem).
 
 ### 4. Workflow semanal sugerido (9:00 - 12:00)
 - Cadência 3-2-1: 3 Reels + 2 carrosséis + 1 longo (YouTube)
@@ -33,12 +33,14 @@ Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.
 ### 5. Setup explicado em alto nível (12:00 - 15:00)
 - 8 etapas, ~30min total
 - O que cada etapa configura
-- Pré-requisitos: Setups 1-6 + Higgsfield AI (conta grátis ou paga)
+- Pré-requisitos: Setups 1-6 + Chrome + 1 provider de imagem (ChatGPT Plus com Codex CLI **OU** chave Gemini grátis). Higgsfield é opcional. ElevenLabs é opcional (mas recomendado pro repurpose).
 
 ### 6. Custos & expectativas (15:00 - 17:00)
-- Higgsfield: estimativa de uso intenso (~5 Reels + 2 repurposes/sem)
-- Whisper local = grátis (CPU)
-- Tempo de geração realista (não é instantâneo)
+- **Reels em MP4 = grátis** (renderiza local, sem créditos AI)
+- **Imagens (carrossel/thumb) = grátis ou quase** se o aluno usa gpt-image-2 via ChatGPT Plus, ou Gemini free tier
+- **Transcrição de live = grátis** com ElevenLabs free tier (~10h/mês), ou 100% offline com Whisper local
+- Higgsfield só entra como fallback se aluno tiver — sem upgrade obrigatório
+- Tempo de geração realista: Reel 30s leva ~5-15s; carrossel 7 slides ~30-60s; transcrição de 1h ~3min (ElevenLabs) ou ~20-40min (Whisper)
 
 ### 7. CTA (17:00 - 18:00)
 - Instalar agora

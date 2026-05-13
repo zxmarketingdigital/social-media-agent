@@ -86,7 +86,7 @@ def main():
         emit_custom_marker()
     else:
         copy_template(choice)
-    print("\nPronto para a Etapa 3 (instalar video-use).")
+    print("\nPronto para a Etapa 3 (setup de transcrição: ElevenLabs + Whisper fallback).")
 
 
 if __name__ == "__main__":

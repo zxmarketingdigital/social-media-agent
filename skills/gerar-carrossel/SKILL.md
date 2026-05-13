@@ -1,6 +1,6 @@
 ---
 name: gerar-carrossel
-description: "Gera carrossel para Instagram (PNGs 1080x1350 ou 1080x1080) ou LinkedIn (PDF). Claude escreve a copy de cada slide; Higgsfield AI gera as imagens lendo DESIGN.md. Use SEMPRE que o aluno disser: criar carrossel, gerar carrossel, novo carrossel, carrossel ig, carrossel instagram, carrossel linkedin, post educativo, post em slides, slides instagram, carousel."
+description: "Gera carrossel para Instagram (PNGs 1080x1350 ou 1080x1080) ou LinkedIn (PDF). Claude escreve a copy de cada slide; imagens geradas via skill `gerar-imagem` (gpt-image-2 → Gemini Nano Banana → Imagen 4) lendo DESIGN.md. Use SEMPRE que o aluno disser: criar carrossel, gerar carrossel, novo carrossel, carrossel ig, carrossel instagram, carrossel linkedin, post educativo, post em slides, slides instagram, carousel."
 model: sonnet
 effort: medium
 ---
@@ -40,26 +40,39 @@ Limite de texto por slide: máximo 50 palavras (carrossel não é blog).
 
 Mostre os textos ao aluno e peça aprovação antes de gerar imagens.
 
-### 2. Geração das imagens via Higgsfield
+### 2. Geração das imagens via skill `gerar-imagem`
 
-Para cada slide, chame `mcp__higgsfield__generate_image` (ou equivalente).
+Para cada slide, chame o helper `gerar-imagem` (escolhe automaticamente o melhor provider disponível: gpt-image-2 via Codex → Gemini Nano Banana → Imagen 4):
+
+```bash
+python3 ~/.claude/skills/gerar-imagem/scripts/gerar.py \
+  --prompt "<prompt completo do slide>" \
+  --output "<output_dir>/slide-<NN>-<nome>.png" \
+  --size 1080x1350 \
+  --quality high \
+  --json
+```
+
+Tamanhos por aspect ratio:
+- `4:5` (recomendado IG feed): `1080x1350`
+- `1:1` (IG quadrado): `1080x1080`
+- LinkedIn A4 paisagem: `1792x1024`
 
 **Estratégia de prompt:**
-- Use a seção "Para Higgsfield" do DESIGN.md como base
+- Use a seção "Para geração de imagem" do DESIGN.md como base (ou a seção "Para Higgsfield" se for o nome antigo).
 - Adicione contexto do slide (capa = mais impactante, conteúdo = limpo com espaço pra texto, CTA = energia)
-- Inclua o texto do slide no prompt para o Higgsfield posicionar tipografia + composição ao redor
+- Inclua o texto do slide no prompt para o gerador posicionar tipografia + composição ao redor
 
 **Exemplo de prompt:**
 ```
 {prompt_base_do_DESIGN.md}, slide 3 of 7 in a carousel, theme: "{tema}",
 text overlay: "{texto_curto_do_slide}", composition: clean center-aligned text
-with visual element below, dimensions {aspect_ratio}
+with visual element below, no embedded watermarks
 ```
 
-**Parâmetros:**
-- `prompt`: como acima
-- `aspect_ratio`: conforme escolha
-- `quality`: alta (default Higgsfield)
+Logue o `provider` retornado pelo JSON para cada slide — o aluno gosta de saber se saiu via gpt-image-2 (melhor tipografia) ou Gemini (mais rápido).
+
+**Se gerar-imagem falhar em TODOS os providers**, instrua o aluno como em `criar-thumbnail` (logar no Codex, ou exportar `GEMINI_API_KEY`).
 
 ### 3. Composição (Instagram)
 
@@ -115,6 +128,7 @@ Mesmo padrão da skill `criar-reel`: rate limit, auth, conteúdo bloqueado. Se 1
 
 ## Não fazer
 
-- Não use Puppeteer/HTML→PNG para o resultado final — qualidade insuficiente. Sempre Higgsfield.
+- Não chame Higgsfield diretamente — use sempre `gerar-imagem`. Higgsfield free não tem rate limit melhor que gpt-image-2 via assinatura ChatGPT, e gpt-image-2 entrega tipografia bem melhor.
+- Não use Puppeteer/HTML→PNG para o resultado final — qualidade insuficiente para imagens AI.
 - Não gere texto longo no slide (>50 palavras) — carrossel é visual.
 - Não publique automaticamente.
