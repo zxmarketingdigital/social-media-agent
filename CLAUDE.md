@@ -188,6 +188,24 @@ Execute: `python3 setup/setup_skills.py`
 
 Idempotente: skills ja instaladas com o mesmo conteudo sao puladas. Se foram modificadas localmente, faz backup antes de atualizar.
 
+Apos copiar, o script imprime automaticamente um **explainer** de cada skill (icone + tipo + o que faz + quando usar + trigger + comando exemplo). Voce — Claude — deve garantir que o aluno LEU esse bloco antes de avancar; se ele estiver confuso, recapitule em linguagem propria os 6 comandos principais que ele vai usar dia a dia.
+
+### O que cada skill faz (resumo pra voce, Claude)
+
+**6 especialistas (uso direto):**
+
+- 🤖 **agente-social-media** — orquestrador com menu numerico. Roteia entre as outras. Use quando o aluno nao sabe por onde comecar.
+- 🎬 **criar-reel** — Reel/Short/TikTok 9:16 animado em MP4. Hook+corpo+CTA escritos pelo Claude, render local via gerar-video-mp4. Sem plano pago.
+- 🖼️ **gerar-carrossel** — 5-10 slides Instagram (PNG) ou LinkedIn (PDF). Copy do Claude + imagens via gerar-imagem.
+- 🎯 **criar-thumbnail** — 3 variantes A/B/C de thumb YouTube 1280×720 (rosto+texto, conceitual, antes-depois).
+- ♻️ **repurpose-conteudo** — 1 video longo → 1 corte YT 8-15min + 3 Shorts + 1 carrossel + copys. Transcricao ElevenLabs preferred + Whisper fallback.
+- ✍️ **gerar-copy-post** — legenda + hashtags + CTA por plataforma (IG/TT/YT/LinkedIn). Le marca.json pra manter voz.
+
+**2 helpers (chamadas pelas de cima, raramente uso direto):**
+
+- 🎨 **gerar-imagem** — gateway com fallback: gpt-image-2 → Gemini Nano Banana → Higgsfield (opcional) → Imagen 4.
+- 📹 **gerar-video-mp4** — HTML animado → Chrome headless (Bun/puppeteer-core) → ffmpeg → MP4.
+
 ---
 
 ## Etapa 5 — Dashboard Local
