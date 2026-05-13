@@ -115,7 +115,7 @@ output/repurpose/{job_id}/
 
 ### 7. Atualizar galeria
 
-Append 1 item agregado:
+Leia `~/.operacao-ia/data/social-media/gallery.json`, append 1 item agregado em `data["items"]`, escreva de volta:
 ```json
 { "type": "repurpose", "title": "<nome>", "path": "output/repurpose/{job_id}/", "count": { "longo": 1, "shorts": 3, "carrossel": 1 }, "created_at": "<ISO>" }
 ```

@@ -44,7 +44,11 @@ def main():
         try:
             existing = json.loads(MARCA_PATH.read_text())
             print(f"⚠️  marca.json já existe — confirme ou edite cada campo (Enter mantém atual)\n")
-        except Exception:
+        except Exception as e:
+            print(f"❌ marca.json existe mas está corrompido: {e}")
+            backup = MARCA_PATH.with_suffix(".json.bak")
+            MARCA_PATH.rename(backup)
+            print(f"   Backup salvo em {backup}. Vou recoletar os campos do zero.\n")
             existing = {}
 
     nome = ask("Nome da marca (ex: Rafael Castro, ZX LAB)", existing.get("nome", ""))

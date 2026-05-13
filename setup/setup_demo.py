@@ -6,6 +6,7 @@ as instruções para o Claude invocar as skills `gerar-carrossel` e `criar-reel`
 usando marca.json + DESIGN.md.
 """
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -16,6 +17,20 @@ DESIGN = DATA / "DESIGN.md"
 DEMO_DIR = DATA / "output" / "demo"
 
 
+def check_higgsfield_connected():
+    try:
+        result = subprocess.run(
+            ["claude", "mcp", "list"],
+            capture_output=True, text=True, timeout=15,
+        )
+        out = (result.stdout + result.stderr).lower()
+        if "higgsfield" in out and "connected" in out:
+            return True
+        return False
+    except Exception:
+        return False
+
+
 def main():
     # validar estado
     if not MARCA.exists():
@@ -23,6 +38,11 @@ def main():
         sys.exit(1)
     if not DESIGN.exists():
         print("❌ DESIGN.md não encontrado. Conclua a Etapa 2 antes.")
+        sys.exit(1)
+    if not check_higgsfield_connected():
+        print("❌ Higgsfield MCP não conectado.")
+        print("   Conecte com: claude mcp add --transport http higgsfield https://mcp.higgsfield.ai/mcp")
+        print("   Faça login pelo browser quando solicitado, e rode esta etapa novamente.")
         sys.exit(1)
 
     DEMO_DIR.mkdir(parents=True, exist_ok=True)

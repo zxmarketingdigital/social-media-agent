@@ -70,6 +70,8 @@ output/thumbs/<YYYY-MM-DD>_<slug>/README.txt   # explicação das 3 variantes + 
 
 ### 4. Atualizar galeria
 
+Leia `~/.operacao-ia/data/social-media/gallery.json`, append em `data["items"]`, escreva de volta. Item:
+
 ```json
 { "type": "thumbnail", "title": "<título do vídeo>", "path": "output/thumbs/<dir>/", "created_at": "<ISO>" }
 ```

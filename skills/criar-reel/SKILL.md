@@ -81,17 +81,11 @@ Onde `<slug-do-tema>` é o tema em kebab-case (`como-usar-ia-no-atendimento`).
 
 ### 4. Atualizar galeria
 
-Append em `~/.operacao-ia/data/social-media/gallery.json`:
+Leia `~/.operacao-ia/data/social-media/gallery.json` (criado pelo setup_dashboard.py com `{"items": []}`), faça append em `data["items"]` e escreva de volta. Item:
 
 ```json
-{
-  "items": [
-    { "type": "reel", "title": "<tema>", "path": "output/reels/...", "created_at": "<ISO>" }
-  ]
-}
+{ "type": "reel", "title": "<tema>", "path": "output/reels/...", "platform": "instagram", "created_at": "<ISO>" }
 ```
-
-(Leia o JSON, append no array `items`, escreva de volta.)
 
 ### 5. Resumo final
 

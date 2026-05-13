@@ -88,8 +88,9 @@ CRIADO: {ISO timestamp}
 
 ## Atualizar galeria (opcional)
 
-Apenas se a copy NÃO está associada a um arquivo de mídia já registrado. Caso contrário, append na entrada existente do mesmo dia:
+Apenas se a copy NÃO está associada a um arquivo de mídia já registrado. Caso contrário, edite a entrada existente do mesmo dia adicionando campo `copy_path`.
 
+Para nova entrada: leia `~/.operacao-ia/data/social-media/gallery.json`, append em `data["items"]`:
 ```json
 { "type": "copy", "title": "<tema>", "platform": "instagram", "path": "output/copys/...", "created_at": "<ISO>" }
 ```

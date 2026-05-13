@@ -97,7 +97,7 @@ Escreva no `copy.txt`:
 
 ### 6. Atualizar galeria
 
-Append em `gallery.json`:
+Leia `~/.operacao-ia/data/social-media/gallery.json`, append em `data["items"]`, escreva de volta. Item:
 ```json
 { "type": "carrossel", "title": "<tema>", "path": "output/carrosseis/<dir>/", "slides": N, "platform": "instagram", "created_at": "<ISO>" }
 ```

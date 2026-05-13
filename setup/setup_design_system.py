@@ -64,7 +64,22 @@ def emit_custom_marker():
     print("(seções: Cores, Tipografia, Espaçamento, Estilo visual, Componentes).")
 
 
+def validate_templates():
+    missing = []
+    for slug, _ in TEMPLATES_DESC[:-1]:  # skip "custom"
+        src = TEMPLATES / slug / "DESIGN.md"
+        if not src.exists():
+            missing.append(str(src))
+    if missing:
+        print("❌ Templates de DESIGN.md faltando no repo:")
+        for m in missing:
+            print(f"   • {m}")
+        print("   O repo parece corrompido. Reclone com: gh repo clone zxmarketingdigital/social-media-agent")
+        sys.exit(1)
+
+
 def main():
+    validate_templates()
     show_options()
     choice = pick_choice()
     if choice == "custom":
