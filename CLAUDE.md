@@ -228,23 +228,43 @@ Execute: `python3 setup/setup_dashboard.py`
 `[██████░░░░] Etapa 6 de 8`
 
 ### O que e
-Demonstracao ao vivo: Claude gera 1 carrossel de 5 slides (via `gerar-carrossel` → `gerar-imagem`) + 1 Reel animado de 30s (via `criar-reel` → `gerar-video-mp4`) apresentando a marca do aluno. Tudo personalizado com `marca.json` e `DESIGN.md`.
+Demonstracao ao vivo: Claude faz um BRIEFING com o aluno e depois gera 1 carrossel + 1 Reel personalizados nas decisoes editoriais que o aluno tomou. Nao e mais um "apresentando a marca" generico.
 
 ### Para que serve
-Mostra na pratica como o fluxo funciona end-to-end antes do aluno comecar a criar sozinho. Tambem valida que os providers de imagem (gpt-image-2/Gemini) e o pipeline de video (Chrome+ffmpeg) estao respondendo.
+Mostra na pratica como o fluxo funciona end-to-end e ensina o aluno a briefar uma peca de conteudo. As respostas dele decidem o que sai — esse momento e tambem aprendizado de copy.
 
 ### Como voce executa
-Execute: `python3 setup/setup_demo.py` (valida estado + lista providers disponiveis + imprime instrucoes detalhadas).
+Execute: `python3 setup/setup_demo.py` (valida estado + lista providers + imprime BRIEFING SCRIPT que voce — Claude — deve seguir).
 
-Depois, voce — Claude — chama as 2 skills:
+**REGRA INVIOLAVEL:** NAO INVOQUE `gerar-carrossel` NEM `criar-reel` ANTES DO BRIEFING. O briefing tem 7 perguntas obrigatorias que o setup_demo.py imprime literalmente. Faca UMA POR VEZ (nao em bloco). Quando todas estiverem respondidas:
 
-1. Invoque a skill `gerar-carrossel` com prompt: "5 slides apresentando a marca {nome} para {publico-alvo} no nicho de {nicho}, tom {tom}"
-2. Invoque a skill `criar-reel` com prompt: "Reel 30 segundos animado apresentando {nome} e o que oferecemos. Hook + 2 pontos + CTA. Plataforma: Instagram, 9:16."
+1. **Apresente o briefing consolidado** — formato:
+   ```
+   📋 BRIEFING APROVACAO
+   • Carrossel: [tema] · [estilo de copy] · [CTA]
+   • Reel:      [hook] · [pontos-chave] · [CTA]
+   • Produto em foco: [nenhum / nome]
+   • Referencias: [se passou]
+   ```
+2. **Pergunte:** "Pode gerar? (s/n/ajustar)"
+   - `s` → invoque as 2 skills
+   - `n` → volte pras perguntas
+   - `ajustar` → ele descreve o que mudar, voce atualiza o briefing e pergunta de novo
 
-Outputs vao para `~/.operacao-ia/data/social-media/output/demo/`.
+3. **Invocacao das skills** (apos `s`):
+   - `gerar-carrossel`: passe tema/estilo/CTA decididos no briefing — NAO use "apresentando a marca {nome}".
+   - `criar-reel`: passe hook/pontos/CTA decididos — NAO use "Reel apresentando {nome}".
+
+4. **Output** em `~/.operacao-ia/data/social-media/output/demo/`:
+   - Carrossel: `output/demo/carrossel-<slug-do-tema>/`
+   - Reel:      `output/demo/reel-<slug-do-tema>.mp4`
+   - Galeria:   append em `gallery.json` (data["items"])
+
+### Se aluno disser "tanto faz, voce escolhe"
+NUNCA decida sozinho. Proponha 2-3 angulos plausiveis pro nicho dele e deixe escolher 1. Exemplo: "Pelo seu nicho {nicho}, 3 angulos fortes pra carrossel sao: A) [angulo 1], B) [angulo 2], C) [angulo 3]. Qual prefere?"
 
 ### Tratamento de erro
-- **Carrossel falha em todos providers de imagem:** instrua o aluno a fazer `codex login` OU criar `~/.operacao-ia/config/gemini.env` com `GEMINI_API_KEY=...` (chave grátis em https://aistudio.google.com/apikey). Repita a demo.
+- **Carrossel falha em todos providers de imagem:** instrua o aluno a fazer `codex login` OU criar `~/.operacao-ia/config/gemini.env` com `GEMINI_API_KEY=...` (chave gratis em https://aistudio.google.com/apikey). Repita a demo.
 - **Reel falha:** confira que Chrome esta instalado e ffmpeg no PATH. Se sim, valide o `scene.html` abrindo no browser antes de re-renderizar.
 - NAO bloqueie em Higgsfield — ele e fallback opcional.
 
