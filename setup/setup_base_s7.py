@@ -111,7 +111,7 @@ def check_codex_or_chatgpt_cli():
             print("⚠️  Codex CLI presente mas erro ao consultar status — pode estar disponível")
             return True
     print("ℹ️  Codex CLI não encontrado (opcional — usado pra gpt-image-2)")
-    print("    Instalar (opcional): npm install -g @openai/codex   ou   pip install openai-codex")
+    print("    Instalar (opcional): npm install -g @openai/codex")
     print("    Sem Codex, gerar-imagem cai automaticamente em Gemini Nano Banana (chave Gemini opcional).")
     return True  # nunca bloqueia
 

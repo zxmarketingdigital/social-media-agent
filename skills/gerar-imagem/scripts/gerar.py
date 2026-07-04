@@ -43,7 +43,6 @@ def load_env_key(name):
         os.path.expanduser("~/.zshrc"),
         os.path.expanduser("~/.profile"),
         os.path.expanduser("~/.bashrc"),
-        os.path.expanduser("~/.openclaw/.env"),
     ]
 
     import re
