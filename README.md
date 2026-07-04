@@ -23,7 +23,7 @@ Pacote de criação de conteúdo para redes sociais que roda direto no Claude Co
 ## Como instalar
 
 ```bash
-gh repo clone zxmarketingdigital/social-media-agent ~/social-media-agent
+git clone https://github.com/zxmarketingdigital/social-media-agent.git ~/social-media-agent
 cd ~/social-media-agent
 claude
 ```

@@ -85,7 +85,7 @@ def validate_templates():
         print("❌ Templates faltando no repo:")
         for m in missing:
             print(f"   • {m}")
-        print("   O repo parece corrompido. Reclone com: gh repo clone zxmarketingdigital/social-media-agent")
+        print("   O repo parece corrompido. Reclone com: git clone https://github.com/zxmarketingdigital/social-media-agent.git")
         sys.exit(1)
 
 

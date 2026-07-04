@@ -138,10 +138,6 @@ await browser.close();
 ### 4. Instalar puppeteer-core (uma vez)
 
 ```bash
-# Reusar de projeto existente se possível:
-ln -sf ~/projetos/agencia-ia-50k-demo-huashu/node_modules ./node_modules
-
-# Ou instalar fresh:
 cd $PROJ && bun add puppeteer-core
 ```
 
@@ -159,7 +155,7 @@ Timings esperados (Apple M-series):
 ### 6. Encode MP4 H.264
 
 ```bash
-FFMPEG=/opt/homebrew/Cellar/ffmpeg/8.1_1/bin/ffmpeg
+FFMPEG=$(command -v ffmpeg)   # nunca hardcodar /opt/homebrew/Cellar/... (versão varia por máquina)
 $FFMPEG -y -framerate 30 -i frames/f%04d.png \
   -c:v libx264 -pix_fmt yuv420p \
   -crf 17 -preset slow \
@@ -238,13 +234,7 @@ Detalhes em `feedback_launcher_symlink_pattern.md` na memória.
 
 ## Tools/paths fixos
 
-- `ffmpeg`: `/opt/homebrew/Cellar/ffmpeg/8.1_1/bin/ffmpeg`
-- `Chrome`: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`
-- `puppeteer-core`: instalado em `~/projetos/agencia-ia-50k-demo-huashu/node_modules` (reusar via symlink)
-- Design system padrão: `~/projetos/zx-control-lp/DESIGN.md` (ou local DESIGN.md do projeto)
-
-## Referência de exemplos
-
-Vídeos já gerados com este pipeline:
-- `~/projetos/agencia-ia-50k-demo-huashu/out/agencia-ia-50k-demo.mp4` — 12s 1080×1350
-- `~/projetos/agencia-ia-automatizada-claude-code/docs/hero-animation-huashu/out/hero-animation.mp4` — 10s 1080×1350
+- `ffmpeg`: resolver via `command -v ffmpeg` (instalar com `brew install ffmpeg` se faltar)
+- `Chrome`: `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` (ou `google-chrome`/`chromium` no PATH)
+- `puppeteer-core`: instalar no projeto com `cd $PROJ && bun add puppeteer-core`
+- Design system: `~/.operacao-ia/data/social-media/DESIGN.md` (o DESIGN.md da marca do aluno, gerado na Etapa 2)
