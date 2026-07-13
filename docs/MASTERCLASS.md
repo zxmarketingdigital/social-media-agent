@@ -33,13 +33,17 @@ Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.
 ### 5. Setup explicado em alto nível (12:00 - 15:00)
 - 8 etapas, ~30min total
 - O que cada etapa configura
-- Pré-requisitos: Setups 1-6 + Chrome + 1 provider de imagem (ChatGPT Plus com Codex CLI **OU** chave Gemini grátis). Higgsfield é opcional. ElevenLabs é opcional (mas recomendado pro repurpose).
+- Pré-requisitos:
+  - **Base:** Setups 1-6, Python 3.10+, `gh` CLI, `ffmpeg` (`brew install ffmpeg`), Claude Code instalado
+  - **Reels:** Chrome ou Chromium + **Bun** (`brew install bun`) para o pipeline puppeteer + ffmpeg
+  - **Imagens:** 1 provider — ChatGPT Plus com Codex CLI (recomendado pra gpt-image-2) **OU** chave Gemini grátis em `~/.operacao-ia/config/gemini.env`. Higgsfield é opcional/não usado pelo gateway.
+  - **Transcrição** (opcional, melhora muito o repurpose): chave ElevenLabs Scribe; Whisper local cobre como fallback.
 
 ### 6. Custos & expectativas (15:00 - 17:00)
 - **Reels em MP4 = grátis** (renderiza local, sem créditos AI)
 - **Imagens (carrossel/thumb) = grátis ou quase** se o aluno usa gpt-image-2 via ChatGPT Plus, ou Gemini free tier
-- **Transcrição de live = grátis** com ElevenLabs free tier (~10h/mês), ou 100% offline com Whisper local
-- Higgsfield só entra como fallback se aluno tiver — sem upgrade obrigatório
+- **Transcrição de live = grátis** com ElevenLabs free tier (minutos incluídos variam por plano — ver pricing oficial), ou 100% offline com Whisper local
+- Higgsfield NÃO entra como provider de imagem (só image2/gemini/imagen); Higgsfield video só pra quem já tem plano pago
 - Tempo de geração realista: Reel 30s leva ~5-15s; carrossel 7 slides ~30-60s; transcrição de 1h ~3min (ElevenLabs) ou ~20-40min (Whisper)
 
 ### 7. CTA (17:00 - 18:00)
@@ -59,5 +63,5 @@ Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.
 Após gravação, usar skill `upload-aulas-hub` ou processo manual:
 1. Subir MP4 no Bunny (lib `MasterClass ZX Control`)
 2. Pegar GUID
-3. Substituir `BUNNY_GUID_S7` em `~/projetos/zx-control-semana1/docs/area-membros.html`
+3. Substituir `BUNNY_GUID_S7` em `~/projetos/zx-control-semana1/docs/index.html`
 4. Deploy área de membros: `wrangler pages deploy ~/projetos/zx-control-semana1/docs/ --project-name zx-control-semana1`

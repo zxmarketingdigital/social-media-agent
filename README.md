@@ -45,7 +45,7 @@ O Claude conduz a instalação completa em 8 etapas (~30min total).
   - **Recomendado:** ChatGPT Plus/Team + Codex CLI (`npm install -g @openai/codex` e `codex login`) — desbloqueia gpt-image-2 com melhor tipografia
   - **Alternativa grátis:** chave Gemini (https://aistudio.google.com/apikey) salva em `~/.operacao-ia/config/gemini.env`
   - **Fallback opcional:** conta Higgsfield AI (MCP) — não obrigatória
-- **Transcrição (opcional, melhora muito o repurpose):** chave ElevenLabs (free tier ~10h/mês em https://elevenlabs.io/app/sign-up). Whisper local cobre como fallback.
+- **Transcrição (opcional, melhora muito o repurpose):** chave ElevenLabs (free tier — minutos incluídos variam por plano, ver pricing oficial em https://elevenlabs.io/pricing/api; cadastro grátis em https://elevenlabs.io/app/sign-up). Whisper local cobre como fallback.
 
 ## Plataformas cobertas
 

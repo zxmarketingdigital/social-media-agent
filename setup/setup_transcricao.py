@@ -4,7 +4,8 @@ Setup 7 — Etapa 3: Setup de Transcrição (ElevenLabs preferred + Whisper fall
 
 Fluxo:
 1. Pergunta ao aluno se ele já tem (ou quer pegar) uma API key da ElevenLabs.
-   - Free tier generoso (~10h/mês de speech-to-text via Scribe v1).
+   - Free tier — minutos incluídos variam por plano (ver pricing oficial em
+     https://elevenlabs.io/pricing/api). Scribe v1 é o modelo padrão.
    - Cadastro gratuito em https://elevenlabs.io/app/sign-up
    - Chave em https://elevenlabs.io/app/settings/api-keys
 2. Se sim → salva em ~/.operacao-ia/config/elevenlabs.env + smoke test (HTTP HEAD).
@@ -66,22 +67,26 @@ def ler_chave_existente():
 
 
 def validar_chave(api_key):
-    """Bate em GET /v1/user — se 200, chave válida."""
+    """Bate em GET /v1/user. Retorna tristate:
+    - 'valid'   → 200 OK, chave confirmada
+    - 'invalid' → 401/403, chave rejeitada pela API
+    - 'unknown' → timeout, SSL, DNS, 5xx, outro erro de rede (não confirma nem invalida)
+    """
     req = urllib.request.Request(
         "https://api.elevenlabs.io/v1/user",
         headers={"xi-api-key": api_key, "Accept": "application/json"},
     )
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
-            return resp.status == 200
+            return "valid" if resp.status == 200 else "unknown"
     except urllib.error.HTTPError as e:
         if e.code in (401, 403):
-            return False
-        print(f"⚠️  ElevenLabs respondeu {e.code} — tratando como inválida.")
-        return False
+            return "invalid"
+        print(f"⚠️  ElevenLabs respondeu {e.code} — não foi possível confirmar a chave.")
+        return "unknown"
     except Exception as e:
-        print(f"⚠️  Não foi possível validar online ({e}). Chave salva sem validação.")
-        return True  # rede offline: aceita
+        print(f"⚠️  Erro de rede ao validar ({e}) — chave salva, mas pode falhar no uso real.")
+        return "unknown"
 
 
 def remover_chave_antiga():
@@ -129,7 +134,8 @@ def setup_elevenlabs():
         return False
 
     print("🔐 Validando chave...")
-    if not validar_chave(chave):
+    estado = validar_chave(chave)
+    if estado == "invalid":
         print("❌ Chave rejeitada pelo ElevenLabs (401/403). Verifique e rode esta etapa de novo.")
         return False
 
@@ -139,7 +145,13 @@ def setup_elevenlabs():
         ELEVEN_ENV.chmod(0o600)
     except Exception:
         pass
-    print(f"✅ Chave salva em {ELEVEN_ENV} (chmod 600)")
+
+    if estado == "valid":
+        print(f"✅ Chave salva e validada em {ELEVEN_ENV} (chmod 600)")
+    else:  # unknown
+        print(f"⚠️  Chave salva em {ELEVEN_ENV} (chmod 600), mas NÃO foi confirmada online.")
+        print("   Se o repurpose falhar com 401, rode esta etapa de novo com a chave correta.")
+        print("   Whisper local fica ativo como fallback de qualquer forma.")
     return True
 
 

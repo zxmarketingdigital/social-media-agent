@@ -1,0 +1,1023 @@
+{
+  "nodes": [
+    {
+      "id": "agente-social-media",
+      "label": "Agente Social Media",
+      "type": "skill",
+      "source_file": "skills/agente-social-media/SKILL.md",
+      "evidence": "Agente orquestrador de criação de conteúdo pra redes sociais. Apresenta menu numérico e roteia"
+    },
+    {
+      "id": "criar-reel",
+      "label": "Criar Reel",
+      "type": "skill",
+      "source_file": "skills/criar-reel/SKILL.md",
+      "evidence": "Gera Reel/Short/TikTok 9:16 (ou Reel feed 4:5) com hook + corpo + CTA. Roteiro escrito pelo Claude"
+    },
+    {
+      "id": "gerar-carrossel",
+      "label": "Gerar Carrossel",
+      "type": "skill",
+      "source_file": "skills/gerar-carrossel/SKILL.md",
+      "evidence": "Gera carrossel para Instagram (PNGs 1080x1350 ou 1080x1080) ou LinkedIn (PDF)"
+    },
+    {
+      "id": "criar-thumbnail",
+      "label": "Criar Thumbnail",
+      "type": "skill",
+      "source_file": "skills/criar-thumbnail/SKILL.md",
+      "evidence": "Gera 3 variantes de thumbnail YouTube (1280x720) via skill gerar-imagem"
+    },
+    {
+      "id": "repurpose-conteudo",
+      "label": "Repurpose Conteúdo",
+      "type": "skill",
+      "source_file": "skills/repurpose-conteudo/SKILL.md",
+      "evidence": "Pega 1 vídeo longo (live, podcast, masterclass) e transforma em pacote multi-plataforma"
+    },
+    {
+      "id": "gerar-copy-post",
+      "label": "Gerar Copy Post",
+      "type": "skill",
+      "source_file": "skills/gerar-copy-post/SKILL.md",
+      "evidence": "Gera legenda + hashtags + CTA pra um post de rede social. Adapta tom e formato por plataforma"
+    },
+    {
+      "id": "gerar-imagem",
+      "label": "Gerar Imagem (Helper)",
+      "type": "skill",
+      "source_file": "skills/gerar-imagem/SKILL.md",
+      "evidence": "Helper único para geração de imagem no ZX LAB. Cobre dois casos: chamada interativa e programática"
+    },
+    {
+      "id": "gerar-video-mp4",
+      "label": "Gerar Vídeo MP4 (Helper)",
+      "type": "skill",
+      "source_file": "skills/gerar-video-mp4/SKILL.md",
+      "evidence": "Gera vídeo MP4 a partir de animação HTML via pipeline puppeteer + Chrome headless + ffmpeg"
+    },
+    {
+      "id": "gpt-image-2",
+      "label": "gpt-image-2 (OpenAI)",
+      "type": "api",
+      "source_file": "skills/gerar-imagem/SKILL.md",
+      "evidence": "gpt-image-2 (OpenAI) | codex exec com tool image_gen nativa (login ChatGPT) | Assinatura ChatGPT"
+    },
+    {
+      "id": "gemini-nano-banana",
+      "label": "Gemini Nano Banana (gemini-3.1-flash-image-preview)",
+      "type": "api",
+      "source_file": "skills/gerar-imagem/SKILL.md",
+      "evidence": "gemini-3.1-flash-image-preview (Nano Banana) | Google GenAI SDK | Free tier / chave Gemini"
+    },
+    {
+      "id": "imagen-4",
+      "label": "Imagen 4 Ultra",
+      "type": "api",
+      "source_file": "skills/gerar-imagem/SKILL.md",
+      "evidence": "imagen-4.0-ultra-generate-001 | Google GenAI SDK | Free tier / chave Gemini"
+    },
+    {
+      "id": "elevenlabs-scribe",
+      "label": "ElevenLabs Scribe",
+      "type": "api",
+      "source_file": "skills/repurpose-conteudo/SKILL.md",
+      "evidence": "Transcrição via ElevenLabs Scribe (preferido — free tier disponível) com fallback automático para Whisper"
+    },
+    {
+      "id": "whisper-local",
+      "label": "Whisper Local (faster-whisper)",
+      "type": "tool",
+      "source_file": "skills/repurpose-conteudo/SKILL.md",
+      "evidence": "Whisper local (fallback ou single): faster-whisper modelo small int8 via ~/.operacao-ia/tools/video-use/.venv"
+    },
+    {
+      "id": "codex-cli",
+      "label": "Codex CLI",
+      "type": "tool",
+      "source_file": "skills/gerar-imagem/SKILL.md",
+      "evidence": "Image 2 via Codex: codex exec precisa de login ChatGPT (codex login status → Logged in using ChatGPT)"
+    },
+    {
+      "id": "chrome-headless",
+      "label": "Chrome Headless (puppeteer-core)",
+      "type": "tool",
+      "source_file": "skills/gerar-video-mp4/SKILL.md",
+      "evidence": "executablePath: CHROME, headless: new, puppeteer.launch()"
+    },
+    {
+      "id": "ffmpeg",
+      "label": "ffmpeg",
+      "type": "tool",
+      "source_file": "skills/gerar-video-mp4/SKILL.md",
+      "evidence": "ffmpeg -y -framerate 30 -i frames/f%04d.png -c:v libx264 -pix_fmt yuv420p"
+    },
+    {
+      "id": "bun-runtime",
+      "label": "Bun Runtime",
+      "type": "tool",
+      "source_file": "skills/gerar-video-mp4/SKILL.md",
+      "evidence": "cd $PROJ && bun render.mjs"
+    },
+    {
+      "id": "marca-json",
+      "label": "marca.json",
+      "type": "file",
+      "source_file": "skills/criar-reel/SKILL.md",
+      "evidence": "~/.operacao-ia/config/marca.json — nome, nicho, persona, tom, público"
+    },
+    {
+      "id": "design-md",
+      "label": "DESIGN.md (Brand Design System)",
+      "type": "file",
+      "source_file": "skills/criar-reel/SKILL.md",
+      "evidence": "~/.operacao-ia/data/social-media/DESIGN.md — design system (paleta, tipografia, estilo)"
+    },
+    {
+      "id": "gallery-json",
+      "label": "gallery.json",
+      "type": "file",
+      "source_file": "skills/criar-reel/SKILL.md",
+      "evidence": "Leia ~/.operacao-ia/data/social-media/gallery.json (criado pelo setup_dashboard.py com {items: []})"
+    },
+    {
+      "id": "scene-html",
+      "label": "scene.html (Animation Source)",
+      "type": "file",
+      "source_file": "skills/gerar-video-mp4/SKILL.md",
+      "evidence": "Criar scene.html com window.SET_TIME(t) que controla TUDO via JS"
+    },
+    {
+      "id": "render-mjs",
+      "label": "render.mjs (Puppeteer Script)",
+      "type": "file",
+      "source_file": "skills/gerar-video-mp4/SKILL.md",
+      "evidence": "import puppeteer from puppeteer-core; ... bun render.mjs"
+    },
+    {
+      "id": "transcript-json",
+      "label": "transcript.json",
+      "type": "file",
+      "source_file": "skills/repurpose-conteudo/SKILL.md",
+      "evidence": "salvar transcript.json, marcar provider=elevenlabs | provider=whisper-local"
+    },
+    {
+      "id": "dashboard-html",
+      "label": "dashboard.html (Local Dashboard)",
+      "type": "file",
+      "source_file": "CLAUDE.md",
+      "evidence": "Gera ~/.operacao-ia/data/social-media/dashboard.html — calendário editorial semanal + galeria"
+    },
+    {
+      "id": "elevenlabs-env",
+      "label": "elevenlabs.env (API Key Store)",
+      "type": "file",
+      "source_file": "skills/repurpose-conteudo/SKILL.md",
+      "evidence": "Ler ELEVENLABS_API_KEY de ~/.operacao-ia/config/elevenlabs.env (ou env var)"
+    },
+    {
+      "id": "gemini-env",
+      "label": "gemini.env (API Key Store)",
+      "type": "file",
+      "source_file": "CLAUDE.md",
+      "evidence": "salve em ~/.operacao-ia/config/gemini.env com GEMINI_API_KEY=..."
+    },
+    {
+      "id": "higgsfield-mcp",
+      "label": "Higgsfield AI MCP",
+      "type": "api",
+      "source_file": "skills/criar-reel/SKILL.md",
+      "evidence": "Se o aluno explicitamente disser usar Higgsfield e o MCP higgsfield estiver conectado: chame mcp__higgsfield__generate_video"
+    },
+    {
+      "id": "video-use-repo",
+      "label": "video-use (browser-use/video-use)",
+      "type": "tool",
+      "source_file": "CLAUDE.md",
+      "evidence": "Whisper local via browser-use/video-use clonado em ~/.operacao-ia/tools/video-use"
+    },
+    {
+      "id": "dark-mono",
+      "label": "dark-mono Design Template",
+      "type": "concept",
+      "source_file": "templates/dark-mono.md",
+      "evidence": "Sistema visual minimalista escuro com mono-fonte. Ideal para tech, finance, B2B, IA"
+    },
+    {
+      "id": "light-editorial",
+      "label": "light-editorial Design Template",
+      "type": "concept",
+      "source_file": "templates/light-editorial.md",
+      "evidence": "Sistema visual claro editorial com serif. Ideal para lifestyle, wellness, educação, coaching"
+    },
+    {
+      "id": "vivid-pop",
+      "label": "vivid-pop Design Template",
+      "type": "concept",
+      "source_file": "templates/vivid-pop.md",
+      "evidence": "Sistema visual colorido vibrante. Ideal para entretenimento, food, fitness, lifestyle jovem"
+    },
+    {
+      "id": "setup-base-s7",
+      "label": "setup_base_s7.py (Etapa 0)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_base_s7.py — verificação inicial: Python 3.10+, gh CLI, ffmpeg, Chrome"
+    },
+    {
+      "id": "setup-marca",
+      "label": "setup_marca.py (Etapa 1)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_marca.py — captura nome da marca, nicho, persona, tom de voz e público-alvo"
+    },
+    {
+      "id": "setup-design-system",
+      "label": "setup_design_system.py (Etapa 2)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_design_system.py — define o DESIGN.md da marca do aluno"
+    },
+    {
+      "id": "setup-transcricao",
+      "label": "setup_transcricao.py (Etapa 3)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_transcricao.py — configura o sistema de transcrição (ElevenLabs + Whisper fallback)"
+    },
+    {
+      "id": "setup-skills",
+      "label": "setup_skills.py (Etapa 4)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_skills.py — copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "id": "setup-dashboard",
+      "label": "setup_dashboard.py (Etapa 5)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_dashboard.py — gera dashboard.html com calendário editorial e galeria"
+    },
+    {
+      "id": "setup-demo",
+      "label": "setup_demo.py (Etapa 6)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_demo.py — demonstração ao vivo: briefing + gerar 1 carrossel + 1 Reel"
+    },
+    {
+      "id": "setup-final-s7",
+      "label": "setup_final_s7.py (Etapa 7)",
+      "type": "workflow",
+      "source_file": "CLAUDE.md",
+      "evidence": "Execute: python3 setup/setup_final_s7.py — resumo da instalação, lista 5 comandos, abre dashboard"
+    },
+    {
+      "id": "masterclass-video",
+      "label": "MasterClass Setup 7 (Video)",
+      "type": "output",
+      "source_file": "docs/MASTERCLASS.md",
+      "evidence": "Vídeo único (aula MasterClass) que apresenta todo o Setup. Será hospedado no Bunny em panel-s7-0"
+    },
+    {
+      "id": "bunny-cdn",
+      "label": "Bunny CDN (Video Hosting)",
+      "type": "api",
+      "source_file": "docs/MASTERCLASS.md",
+      "evidence": "Subir MP4 no Bunny (lib MasterClass ZX Control) — Pegar GUID — Substituir BUNNY_GUID_S7"
+    },
+    {
+      "id": "zx-control-area-membros",
+      "label": "ZX Control Área de Membros",
+      "type": "output",
+      "source_file": "docs/MASTERCLASS.md",
+      "evidence": "Substituir BUNNY_GUID_S7 em ~/projetos/zx-control-semana1/docs/area-membros.html"
+    },
+    {
+      "id": "wrangler-pages-deploy",
+      "label": "Cloudflare Pages Deploy (wrangler)",
+      "type": "tool",
+      "source_file": "docs/MASTERCLASS.md",
+      "evidence": "wrangler pages deploy ~/projetos/zx-control-semana1/docs/ --project-name zx-control-semana1"
+    },
+    {
+      "id": "upload-aulas-hub",
+      "label": "upload-aulas-hub Skill",
+      "type": "skill",
+      "source_file": "docs/MASTERCLASS.md",
+      "evidence": "Após gravação, usar skill upload-aulas-hub ou processo manual"
+    },
+    {
+      "id": "output-reels",
+      "label": "Output Reels (MP4 Files)",
+      "type": "output",
+      "source_file": "skills/criar-reel/SKILL.md",
+      "evidence": "~/.operacao-ia/data/social-media/output/reels/YYYY-MM-DD_<slug-do-tema>.mp4"
+    },
+    {
+      "id": "output-carrosseis",
+      "label": "Output Carrosseis (PNGs/PDF)",
+      "type": "output",
+      "source_file": "skills/gerar-carrossel/SKILL.md",
+      "evidence": "output/carrosseis/<YYYY-MM-DD>_<slug>/slide-01-capa.png ... slide-07-cta.png + copy.txt"
+    },
+    {
+      "id": "output-thumbs",
+      "label": "Output Thumbnails (1280x720 PNGs)",
+      "type": "output",
+      "source_file": "skills/criar-thumbnail/SKILL.md",
+      "evidence": "output/thumbs/<YYYY-MM-DD>_<slug>/thumb-A-rosto.png, thumb-B-conceitual.png, thumb-C-comparacao.png"
+    },
+    {
+      "id": "output-repurpose",
+      "label": "Output Repurpose Pack",
+      "type": "output",
+      "source_file": "skills/repurpose-conteudo/SKILL.md",
+      "evidence": "output/repurpose/{job_id}/longo-12min.mp4 + short-1..3.mp4 + carrossel/ + copys/"
+    },
+    {
+      "id": "output-copys",
+      "label": "Output Copy Files (.copy.txt)",
+      "type": "output",
+      "source_file": "skills/gerar-copy-post/SKILL.md",
+      "evidence": "salve com sufixo .copy.txt, ou em ~/.operacao-ia/data/social-media/output/copys/YYYY-MM-DD_<slug>.txt"
+    },
+    {
+      "id": "design-showcase-html",
+      "label": "design-showcase.html (Visual Approval)",
+      "type": "output",
+      "source_file": "CLAUDE.md",
+      "evidence": "salve em ~/.operacao-ia/data/social-media/design-showcase.html — abra no browser e pergunte aprovação"
+    },
+    {
+      "id": "workflow-3-2-1",
+      "label": "Workflow 3-2-1 (Weekly Cadence)",
+      "type": "workflow",
+      "source_file": "docs/MASTERCLASS.md",
+      "evidence": "Cadência 3-2-1: 3 Reels + 2 carrosséis + 1 longo (YouTube); Stories diárias; Repurpose 1x/mês"
+    },
+    {
+      "id": "pillow-python",
+      "label": "Pillow (Python PIL)",
+      "type": "tool",
+      "source_file": "skills/gerar-carrossel/SKILL.md",
+      "evidence": "from PIL import Image; ... imgs[0].save(...pdf...) — Pillow é dependência padrão do video-use"
+    },
+    {
+      "id": "config-json",
+      "label": "config.json (Phase Tracking)",
+      "type": "file",
+      "source_file": "CLAUDE.md",
+      "evidence": "Marca phase_completed = 7 em ~/.operacao-ia/config/config.json"
+    },
+    {
+      "id": "design-showcase-template",
+      "label": "design-showcase-template.html (785 lines)",
+      "type": "file",
+      "source_file": "CLAUDE.md",
+      "evidence": "Leia templates/design-showcase-template.html (esqueleto HTML/CSS de 785 linhas)"
+    }
+  ],
+  "edges": [
+    {
+      "source": "agente-social-media",
+      "target": "criar-reel",
+      "relation": "delegates_to",
+      "type": "EXTRACTED",
+      "evidence": "1) Criar Reel/Short → skill: criar-reel"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "gerar-carrossel",
+      "relation": "delegates_to",
+      "type": "EXTRACTED",
+      "evidence": "2) Gerar carrossel → skill: gerar-carrossel"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "criar-thumbnail",
+      "relation": "delegates_to",
+      "type": "EXTRACTED",
+      "evidence": "3) Thumbnail YouTube → skill: criar-thumbnail"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "gerar-copy-post",
+      "relation": "delegates_to",
+      "type": "EXTRACTED",
+      "evidence": "5) Copy de post → skill: gerar-copy-post"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "repurpose-conteudo",
+      "relation": "delegates_to",
+      "type": "EXTRACTED",
+      "evidence": "6) Repurpose de live/vídeo → skill: repurpose-conteudo"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "marca-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Sempre leia antes de responder: ~/.operacao-ia/config/marca.json — identidade da marca"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "design-md",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Sempre leia antes de responder: ~/.operacao-ia/data/social-media/DESIGN.md — design system"
+    },
+    {
+      "source": "agente-social-media",
+      "target": "dashboard-html",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "7) Abrir dashboard → file://~/.operacao-ia/data/social-media/dashboard.html"
+    },
+    {
+      "source": "criar-reel",
+      "target": "gerar-video-mp4",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "vídeo animado gerado via skill gerar-video-mp4 (Chrome headless + ffmpeg)"
+    },
+    {
+      "source": "criar-reel",
+      "target": "marca-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Sempre leia antes de gerar: ~/.operacao-ia/config/marca.json"
+    },
+    {
+      "source": "criar-reel",
+      "target": "design-md",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Sempre leia antes de gerar: ~/.operacao-ia/data/social-media/DESIGN.md"
+    },
+    {
+      "source": "criar-reel",
+      "target": "scene-html",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Crie scene.html seguindo as regras OBRIGATÓRIAS da skill gerar-video-mp4"
+    },
+    {
+      "source": "criar-reel",
+      "target": "output-reels",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Mover out/video.mp4 para ~/.operacao-ia/data/social-media/output/reels/YYYY-MM-DD_<slug>.mp4"
+    },
+    {
+      "source": "criar-reel",
+      "target": "gallery-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Leia gallery.json, faça append em data[items] e escreva de volta"
+    },
+    {
+      "source": "criar-reel",
+      "target": "higgsfield-mcp",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Se aluno disser usar Higgsfield e MCP higgsfield conectado: chame mcp__higgsfield__generate_video"
+    },
+    {
+      "source": "gerar-carrossel",
+      "target": "gerar-imagem",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "imagens geradas via skill gerar-imagem (gpt-image-2 → Gemini Nano Banana → Imagen 4)"
+    },
+    {
+      "source": "gerar-carrossel",
+      "target": "marca-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Sempre leia antes: ~/.operacao-ia/config/marca.json"
+    },
+    {
+      "source": "gerar-carrossel",
+      "target": "design-md",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Sempre leia antes: ~/.operacao-ia/data/social-media/DESIGN.md"
+    },
+    {
+      "source": "gerar-carrossel",
+      "target": "output-carrosseis",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "output/carrosseis/<YYYY-MM-DD>_<slug>/slide-01-capa.png ... slide-07-cta.png"
+    },
+    {
+      "source": "gerar-carrossel",
+      "target": "gallery-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Leia gallery.json, append em data[items], escreva de volta"
+    },
+    {
+      "source": "gerar-carrossel",
+      "target": "pillow-python",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "from PIL import Image; imgs[0].save(carrossel.pdf, save_all=True) — para LinkedIn PDF"
+    },
+    {
+      "source": "criar-thumbnail",
+      "target": "gerar-imagem",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "via skill gerar-imagem (gpt-image-2 preferido, Gemini Nano Banana / Imagen 4 como fallback)"
+    },
+    {
+      "source": "criar-thumbnail",
+      "target": "marca-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "~/.operacao-ia/config/marca.json"
+    },
+    {
+      "source": "criar-thumbnail",
+      "target": "design-md",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "~/.operacao-ia/data/social-media/DESIGN.md"
+    },
+    {
+      "source": "criar-thumbnail",
+      "target": "output-thumbs",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "output/thumbs/<YYYY-MM-DD>_<slug>/thumb-A-rosto.png, thumb-B-conceitual.png, thumb-C-comparacao.png"
+    },
+    {
+      "source": "criar-thumbnail",
+      "target": "gallery-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Leia gallery.json, append em data[items], escreva de volta"
+    },
+    {
+      "source": "criar-thumbnail",
+      "target": "pillow-python",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "se PNG vier em outro tamanho que não 1280×720, faça resize com Pillow"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "elevenlabs-scribe",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Se chave existe → tentar ElevenLabs: POST https://api.elevenlabs.io/v1/speech-to-text"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "whisper-local",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Whisper local (fallback ou single): faster-whisper modelo small int8"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "gerar-carrossel",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "Invoque a skill gerar-carrossel passando como tema Principais lições de {nome_do_video}"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "ffmpeg",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "ffmpeg -i {caminho_video} -ss {start_sec} -to {end_sec} -c:v libx264"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "transcript-json",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "salvar transcript.json com provider=elevenlabs ou whisper-local"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "output-repurpose",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "output/repurpose/{job_id}/longo-12min.mp4 + short-1..3.mp4 + carrossel/ + copys/"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "gallery-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Leia gallery.json, append 1 item agregado em data[items], escreva de volta"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "elevenlabs-env",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Ler ELEVENLABS_API_KEY de ~/.operacao-ia/config/elevenlabs.env"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "video-use-repo",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "faster-whisper modelo small int8 via ~/.operacao-ia/tools/video-use/.venv/bin/python"
+    },
+    {
+      "source": "repurpose-conteudo",
+      "target": "marca-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "marca.json e DESIGN.md preenchidos (pré-requisito)"
+    },
+    {
+      "source": "gerar-copy-post",
+      "target": "marca-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "~/.operacao-ia/config/marca.json — nome, persona, tom, público"
+    },
+    {
+      "source": "gerar-copy-post",
+      "target": "output-copys",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "salve com sufixo .copy.txt ou em output/copys/YYYY-MM-DD_<slug>.txt"
+    },
+    {
+      "source": "gerar-copy-post",
+      "target": "gallery-json",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "apenas se a copy NÃO está associada a um arquivo de mídia já registrado — append em data[items]"
+    },
+    {
+      "source": "gerar-imagem",
+      "target": "gpt-image-2",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Ordem 1: gpt-image-2 (OpenAI) | codex exec com tool image_gen nativa"
+    },
+    {
+      "source": "gerar-imagem",
+      "target": "gemini-nano-banana",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Ordem 2: gemini-3.1-flash-image-preview (Nano Banana) | Google GenAI SDK"
+    },
+    {
+      "source": "gerar-imagem",
+      "target": "imagen-4",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Ordem 3: imagen-4.0-ultra-generate-001 | Google GenAI SDK"
+    },
+    {
+      "source": "gerar-imagem",
+      "target": "codex-cli",
+      "relation": "requires",
+      "type": "EXTRACTED",
+      "evidence": "Image 2 via Codex: codex exec precisa de login ChatGPT (codex login status)"
+    },
+    {
+      "source": "gerar-imagem",
+      "target": "gemini-env",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Gemini: usa GEMINI_API_KEY do env ou ~/.operacao-ia/config/*.env"
+    },
+    {
+      "source": "gemini-nano-banana",
+      "target": "gpt-image-2",
+      "relation": "fallback_for",
+      "type": "EXTRACTED",
+      "evidence": "A escolha automática usa o primeiro que estiver disponível: gpt-image-2 → Gemini → Imagen"
+    },
+    {
+      "source": "imagen-4",
+      "target": "gemini-nano-banana",
+      "relation": "fallback_for",
+      "type": "EXTRACTED",
+      "evidence": "Ordem 3: imagen-4.0-ultra-generate-001 — terceiro na cadeia de fallback"
+    },
+    {
+      "source": "whisper-local",
+      "target": "elevenlabs-scribe",
+      "relation": "fallback_for",
+      "type": "EXTRACTED",
+      "evidence": "Whisper local fica como fallback offline; Erro 401 ou 429 → log claro + cair para Whisper"
+    },
+    {
+      "source": "gerar-video-mp4",
+      "target": "chrome-headless",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "puppeteer.launch({executablePath: CHROME, headless: new})"
+    },
+    {
+      "source": "gerar-video-mp4",
+      "target": "ffmpeg",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "$FFMPEG -y -framerate 30 -i frames/f%04d.png -c:v libx264"
+    },
+    {
+      "source": "gerar-video-mp4",
+      "target": "bun-runtime",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "cd $PROJ && bun render.mjs"
+    },
+    {
+      "source": "gerar-video-mp4",
+      "target": "scene-html",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "const HTML = file:// + path.join(__dirname, scene.html)"
+    },
+    {
+      "source": "gerar-video-mp4",
+      "target": "render-mjs",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Criar render.mjs com puppeteer-core import"
+    },
+    {
+      "source": "setup-base-s7",
+      "target": "setup-marca",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Liste as 8 etapas que virão — Etapa 0 precede Etapa 1"
+    },
+    {
+      "source": "setup-marca",
+      "target": "marca-json",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Confirme que ~/.operacao-ia/config/marca.json foi criado"
+    },
+    {
+      "source": "setup-design-system",
+      "target": "design-md",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "script grava o DESIGN.md — salve em ~/.operacao-ia/data/social-media/DESIGN.md"
+    },
+    {
+      "source": "setup-design-system",
+      "target": "dark-mono",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "dark-mono — minimalista escuro, mono-fonte (ideal para nichos tech, finance, B2B)"
+    },
+    {
+      "source": "setup-design-system",
+      "target": "light-editorial",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "light-editorial — claro editorial com serif (ideal para lifestyle, wellness, educação)"
+    },
+    {
+      "source": "setup-design-system",
+      "target": "vivid-pop",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "vivid-pop — colorido vibrante (ideal para entretenimento, food, fitness)"
+    },
+    {
+      "source": "setup-design-system",
+      "target": "design-showcase-html",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "salve em ~/.operacao-ia/data/social-media/design-showcase.html — abra no browser"
+    },
+    {
+      "source": "setup-design-system",
+      "target": "design-showcase-template",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Leia templates/design-showcase-template.html (esqueleto HTML/CSS de 785 linhas)"
+    },
+    {
+      "source": "setup-transcricao",
+      "target": "elevenlabs-scribe",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "script valida via GET /v1/user, salva em ~/.operacao-ia/config/elevenlabs.env"
+    },
+    {
+      "source": "setup-transcricao",
+      "target": "whisper-local",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Sempre instala Whisper local (clone browser-use/video-use + venv + faster-whisper) como fallback"
+    },
+    {
+      "source": "setup-skills",
+      "target": "criar-reel",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "source": "setup-skills",
+      "target": "gerar-carrossel",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "source": "setup-skills",
+      "target": "criar-thumbnail",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "source": "setup-skills",
+      "target": "repurpose-conteudo",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "source": "setup-skills",
+      "target": "gerar-copy-post",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "source": "setup-skills",
+      "target": "agente-social-media",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "Copia 8 skills de skills/ para ~/.claude/skills/"
+    },
+    {
+      "source": "setup-skills",
+      "target": "gerar-imagem",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "2 skills helper (chamadas pelas de cima): gerar-imagem e gerar-video-mp4"
+    },
+    {
+      "source": "setup-skills",
+      "target": "gerar-video-mp4",
+      "relation": "configures",
+      "type": "EXTRACTED",
+      "evidence": "2 skills helper (chamadas pelas de cima): gerar-imagem e gerar-video-mp4"
+    },
+    {
+      "source": "setup-dashboard",
+      "target": "dashboard-html",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Gera ~/.operacao-ia/data/social-media/dashboard.html — calendário editorial + galeria"
+    },
+    {
+      "source": "setup-dashboard",
+      "target": "gallery-json",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "gallery.json criado pelo setup_dashboard.py com {items: []}"
+    },
+    {
+      "source": "setup-demo",
+      "target": "gerar-carrossel",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "gerar-carrossel: passe tema/estilo/CTA decididos no briefing"
+    },
+    {
+      "source": "setup-demo",
+      "target": "criar-reel",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "criar-reel: passe hook/pontos/CTA decididos"
+    },
+    {
+      "source": "setup-final-s7",
+      "target": "config-json",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Marca phase_completed = 7 em ~/.operacao-ia/config/config.json"
+    },
+    {
+      "source": "setup-final-s7",
+      "target": "dashboard-html",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Abre dashboard.html no browser padrão"
+    },
+    {
+      "source": "masterclass-video",
+      "target": "bunny-cdn",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Subir MP4 no Bunny (lib MasterClass ZX Control) — Pegar GUID"
+    },
+    {
+      "source": "masterclass-video",
+      "target": "zx-control-area-membros",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Substituir BUNNY_GUID_S7 em ~/projetos/zx-control-semana1/docs/area-membros.html"
+    },
+    {
+      "source": "masterclass-video",
+      "target": "upload-aulas-hub",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Após gravação, usar skill upload-aulas-hub ou processo manual"
+    },
+    {
+      "source": "masterclass-video",
+      "target": "wrangler-pages-deploy",
+      "relation": "uses",
+      "type": "EXTRACTED",
+      "evidence": "Deploy área de membros: wrangler pages deploy ~/projetos/zx-control-semana1/docs/"
+    },
+    {
+      "source": "dark-mono",
+      "target": "design-md",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "setup_design_system.py oferece dark-mono → grava DESIGN.md da marca"
+    },
+    {
+      "source": "light-editorial",
+      "target": "design-md",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "setup_design_system.py oferece light-editorial → grava DESIGN.md da marca"
+    },
+    {
+      "source": "vivid-pop",
+      "target": "design-md",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "setup_design_system.py oferece vivid-pop → grava DESIGN.md da marca"
+    },
+    {
+      "source": "criar-reel",
+      "target": "gerar-copy-post",
+      "relation": "calls",
+      "type": "EXTRACTED",
+      "evidence": "Legenda sugerida pra postagem (chame gerar-copy-post internamente se quiser)"
+    },
+    {
+      "source": "video-use-repo",
+      "target": "whisper-local",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "clone browser-use/video-use em ~/.operacao-ia/tools/video-use/ + venv + faster-whisper"
+    },
+    {
+      "source": "video-use-repo",
+      "target": "pillow-python",
+      "relation": "produces",
+      "type": "EXTRACTED",
+      "evidence": "Pillow é dependência padrão do video-use — disponível em ~/.operacao-ia/tools/video-use/.venv/bin/python"
+    },
+    {
+      "source": "higgsfield-mcp",
+      "target": "gerar-video-mp4",
+      "relation": "replaces",
+      "type": "EXTRACTED",
+      "evidence": "Versões antigas chamavam Higgsfield para gerar vídeo. O plano grátis da Higgsfield não gera vídeo. Para evitar travar o aluno num upgrade, a geração agora é local via gerar-video-mp4"
+    },
+    {
+      "source": "setup-base-s7",
+      "target": "codex-cli",
+      "relation": "requires",
+      "type": "EXTRACTED",
+      "evidence": "Verificação inicial: Codex CLI logado em ChatGPT (para gpt-image-2)"
+    },
+    {
+      "source": "setup-base-s7",
+      "target": "ffmpeg",
+      "relation": "requires",
+      "type": "EXTRACTED",
+      "evidence": "Verificação inicial: Python 3.10+, gh CLI, ffmpeg, Chrome"
+    },
+    {
+      "source": "setup-base-s7",
+      "target": "chrome-headless",
+      "relation": "requires",
+      "type": "EXTRACTED",
+      "evidence": "Chrome (para gerar-video-mp4), se Chrome não estiver instalado, instrua a baixar"
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

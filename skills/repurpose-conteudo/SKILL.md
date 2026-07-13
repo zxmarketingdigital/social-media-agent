@@ -1,6 +1,6 @@
 ---
 name: repurpose-conteudo
-description: "Pega 1 vídeo longo (live, podcast, masterclass) e transforma em pacote multi-plataforma: 1 corte YouTube 8-15min + 3 Shorts/Reels + 1 carrossel + copys. Transcrição via ElevenLabs Scribe (preferido — free tier ~10h/mês) com fallback automático para Whisper local. Claude identifica momentos virais, ffmpeg corta, skill `gerar-imagem` produz o carrossel. Use SEMPRE que o aluno disser: repurpose, transformar live, cortar masterclass, reaproveitar video, repurposing, transformar live em conteudo, reaproveitar gravacao, repurposar."
+description: "Pega 1 vídeo longo (live, podcast, masterclass) e transforma em pacote multi-plataforma: 1 corte YouTube 8-15min + 3 Shorts/Reels + 1 carrossel + copys. Transcrição via ElevenLabs Scribe (preferido — free tier disponível, minutos variam por plano) com fallback automático para Whisper local. Claude identifica momentos virais, ffmpeg corta, skill `gerar-imagem` produz o carrossel. Use SEMPRE que o aluno disser: repurpose, transformar live, cortar masterclass, reaproveitar video, repurposing, transformar live em conteudo, reaproveitar gravacao, repurposar."
 model: sonnet
 effort: high
 ---
@@ -34,28 +34,33 @@ Se faltar algo, oriente o aluno antes de prosseguir.
 ```
 1. Ler ELEVENLABS_API_KEY de ~/.operacao-ia/config/elevenlabs.env (ou env var)
 2. Se chave existe → tentar ElevenLabs:
-     - Extrair áudio com ffmpeg se vídeo > 1GB (POST /v1/speech-to-text aceita até 1GB)
-     - POST https://api.elevenlabs.io/v1/speech-to-text
+     - Extrair áudio com ffmpeg (mono 16k 64kbps) — limite real da API é 3GB (não 1GB)
+     - POST https://api.elevenlabs.io/v1/speech-to-text com `curl -fS -w "%{http_code}"`
        multipart: file=<audio.mp3>, model_id="scribe_v1", language_code="por"
        header: xi-api-key: <chave>
-     - Sucesso → parsear `words` em segments {start, end, text}, salvar transcript.json, marcar provider="elevenlabs"
-     - Erro 401 (chave inválida) ou 429 (limite atingido) ou outro → log claro + cair para Whisper
+     - Classificar status HTTP:
+       · 200 → parsear `words`, agrupar em segments, salvar transcript.json (provider="elevenlabs-scribe")
+       · 401/403 → "chave inválida ou sem permissão" → fallback Whisper
+       · 429 → "limite atingido" → fallback Whisper (sem retry — limite é mensal)
+       · 5xx ou timeout → retry uma vez após 5s; se persistir → fallback Whisper
+       · qualquer outro → log do status + body[:200] → fallback Whisper
 3. Whisper local (fallback ou single):
      - faster-whisper modelo "small" int8 via ~/.operacao-ia/tools/video-use/.venv/bin/python
+     - **video_in passado via sys.argv[1]**, NUNCA interpolado em string Python (path pode ter aspas: `Cliente's live.mp4`)
      - Salvar transcript.json com provider="whisper-local"
 ```
 
-**Comando ElevenLabs (curl, em pseudocódigo Python):**
+**Implementação real (Python, NÃO pseudocódigo — copiar como referência):**
 
 ```python
-import os, subprocess, json, urllib.request
+import os, subprocess, json, time
 from pathlib import Path
 
 job_dir = Path.home() / ".operacao-ia/data/social-media/output/repurpose" / job_id
 job_dir.mkdir(parents=True, exist_ok=True)
 audio = job_dir / "audio.mp3"
 
-# Extrair áudio compacto pra reduzir upload
+# Extrair áudio compacto (mono 16k 64kbps) — reduz upload e cabe no limite de 3GB da API
 subprocess.run([
     "ffmpeg", "-y", "-i", str(video_in),
     "-vn", "-ac", "1", "-ar", "16000", "-b:a", "64k",
@@ -63,47 +68,95 @@ subprocess.run([
 ], check=True)
 
 api_key = read_env("ELEVENLABS_API_KEY")
+used_provider = None
+
+def call_elevenlabs(audio_path, api_key, timeout=600):
+    """Retorna (status_code: int, body: str). Usa curl com -w pra capturar HTTP code."""
+    proc = subprocess.run([
+        "curl", "-sS", "-X", "POST",
+        "-w", "\\n__HTTP__%{http_code}",
+        "--max-time", str(timeout),
+        "https://api.elevenlabs.io/v1/speech-to-text",
+        "-H", f"xi-api-key: {api_key}",
+        "-F", f"file=@{audio_path}",
+        "-F", "model_id=scribe_v1",
+        "-F", "language_code=por",
+        "-F", "diarize=false",
+        "-F", "tag_audio_events=false",
+    ], capture_output=True, text=True, timeout=timeout + 30)
+    body, _, code = proc.stdout.rpartition("\n__HTTP__")
+    try:
+        return int(code), body
+    except ValueError:
+        return 0, proc.stdout  # curl falhou antes de receber resposta
+
+def group_words_into_segments(words, gap=0.6):
+    """Agrupa `words` (cada {text,start,end,type}) em segments por pausas > gap segundos.
+    Filtra type='spacing' que a API insere entre palavras."""
+    segments, cur, cur_start, last_end = [], [], None, 0.0
+    for w in words:
+        if w.get("type") == "spacing":
+            continue
+        if cur_start is None:
+            cur_start = w["start"]
+        if w["start"] - last_end > gap and cur:
+            segments.append({"start": cur_start, "end": last_end, "text": " ".join(cur).strip()})
+            cur, cur_start = [], w["start"]
+        cur.append(w["text"])
+        last_end = w["end"]
+    if cur:
+        segments.append({"start": cur_start, "end": last_end, "text": " ".join(cur).strip()})
+    return segments
+
 if api_key:
     try:
-        # Use requests/curl via subprocess para multipart simples
-        result = subprocess.run([
-            "curl", "-sS", "-X", "POST",
-            "https://api.elevenlabs.io/v1/speech-to-text",
-            "-H", f"xi-api-key: {api_key}",
-            "-F", f"file=@{audio}",
-            "-F", "model_id=scribe_v1",
-            "-F", "language_code=por",
-            "-F", "diarize=false",
-            "-F", "tag_audio_events=false",
-        ], capture_output=True, text=True, check=True, timeout=600)
-        data = json.loads(result.stdout)
-        # data["words"]: lista de {text, start, end, type}
-        # Agrupar em segmentos por pausas > 0.6s
-        segments = group_words_into_segments(data["words"])
-        (job_dir / "transcript.json").write_text(json.dumps({
-            "provider": "elevenlabs-scribe",
-            "duration": data.get("language_probability", 0) and data["words"][-1]["end"],
-            "language": data.get("language_code", "por"),
-            "segments": segments,
-        }, ensure_ascii=False, indent=2))
-        used_provider = "elevenlabs-scribe"
-    except Exception as e:
-        print(f"⚠️  ElevenLabs falhou ({e}) — caindo para Whisper local")
-        api_key = None  # força fallback
+        status, body = call_elevenlabs(audio, api_key)
+        # Retry uma vez em 5xx ou timeout
+        if status >= 500 or status == 0:
+            print(f"⚠️  ElevenLabs HTTP {status} — retry em 5s")
+            time.sleep(5)
+            status, body = call_elevenlabs(audio, api_key)
 
-if not api_key:
-    # Whisper local
+        if status == 200:
+            data = json.loads(body)
+            segments = group_words_into_segments(data.get("words", []))
+            duration = data["words"][-1]["end"] if data.get("words") else 0
+            (job_dir / "transcript.json").write_text(json.dumps({
+                "provider": "elevenlabs-scribe",
+                "duration": duration,
+                "language": data.get("language_code", "por"),
+                "segments": segments,
+            }, ensure_ascii=False, indent=2))
+            used_provider = "elevenlabs-scribe"
+        elif status in (401, 403):
+            print(f"❌ ElevenLabs {status}: chave inválida/sem permissão — fallback Whisper")
+        elif status == 429:
+            print(f"❌ ElevenLabs 429: limite mensal atingido — fallback Whisper")
+        else:
+            print(f"⚠️  ElevenLabs HTTP {status} — fallback Whisper. Body: {body[:200]}")
+    except Exception as e:
+        print(f"⚠️  ElevenLabs erro ({e}) — fallback Whisper")
+
+if used_provider is None:
+    # Whisper local — video_in via argv[1], NUNCA interpolado (paths podem ter aspas)
     py = Path.home() / ".operacao-ia/tools/video-use/.venv/bin/python"
-    subprocess.run([str(py), "-c", f"""
-import json
-from faster_whisper import WhisperModel
-m = WhisperModel('small', device='cpu', compute_type='int8')
-segs, info = m.transcribe('{video_in}', language='pt')
-out = [{{'start': s.start, 'end': s.end, 'text': s.text.strip()}} for s in segs]
-print(json.dumps({{'provider':'whisper-local','duration':info.duration,'segments':out}}, ensure_ascii=False))
-"""], check=True, stdout=open(job_dir / "transcript.json", "w"))
+    whisper_code = (
+        "import json, sys\n"
+        "from faster_whisper import WhisperModel\n"
+        "m = WhisperModel('small', device='cpu', compute_type='int8')\n"
+        "segs, info = m.transcribe(sys.argv[1], language='pt')\n"
+        "out = [{'start': s.start, 'end': s.end, 'text': s.text.strip()} for s in segs]\n"
+        "print(json.dumps({'provider':'whisper-local','duration':info.duration,'segments':out}, ensure_ascii=False))\n"
+    )
+    result = subprocess.run(
+        [str(py), "-c", whisper_code, str(video_in)],
+        check=True, capture_output=True, text=True
+    )
+    (job_dir / "transcript.json").write_text(result.stdout)
     used_provider = "whisper-local"
 
+# Limpar áudio temporário (não precisa mais)
+audio.unlink(missing_ok=True)
 print(f"✅ Transcrição: {used_provider}")
 ```
 

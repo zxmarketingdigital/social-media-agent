@@ -6,9 +6,9 @@
 > "Olá! Aqui é o Claude da ZX LAB e vou instalar contigo a sua operação completa de criação de conteúdo pra redes sociais direto no Claude Code.
 >
 > Ao final desta sessão você terá:
-> - **Geração de imagens** via gpt-image-2 (ChatGPT/Codex CLI) com fallback automático pra Gemini Nano Banana e Higgsfield — sem depender de plano pago
+> - **Geração de imagens** via gpt-image-2 (ChatGPT/Codex CLI) com fallback automático pra Gemini Nano Banana e Imagen 4 — sem depender de plano pago
 > - **Geração de vídeo (Reels animados)** 100% local: HTML animado renderizado em MP4 com Chrome + ffmpeg, mesmo motor dos nossos anúncios
-> - **Transcrição de lives** via ElevenLabs Scribe (free tier 10h/mês) com fallback automático pra Whisper local
+> - **Transcrição de lives** via ElevenLabs Scribe (free tier — minutos variam por plano, ver pricing oficial) com fallback automático pra Whisper local
 > - **8 skills especialistas:** Reel, Carrossel, Thumbnail YouTube, Repurpose de Live, Copy de Post, Agente orquestrador, e os 2 helpers `gerar-imagem` + `gerar-video-mp4`
 > - **Seu próprio Design System** (cores, tipografia, identidade) lendo em todas as gerações
 > - **Dashboard local** com calendário editorial + galeria do que você produzir
@@ -153,10 +153,10 @@ Loop ate aprovacao. NAO avance pra Etapa 3 sem o aluno aprovar visualmente.
 `[███░░░░░░░] Etapa 3 de 8`
 
 ### O que e
-Configura o sistema de transcricao usado pela skill `repurpose-conteudo` para transformar lives/podcasts em pacote multi-plataforma. Provedor preferencial e o ElevenLabs Scribe (rapido, free tier ~10h/mes); Whisper local fica como fallback offline.
+Configura o sistema de transcricao usado pela skill `repurpose-conteudo` para transformar lives/podcasts em pacote multi-plataforma. Provedor preferencial e o ElevenLabs Scribe (rapido, free tier — minutos incluidos variam por plano, ver pricing oficial); Whisper local fica como fallback offline.
 
 ### Para que serve
-Lives de 1h transcrevem em 2-4 minutos com ElevenLabs (vs 15-60min com Whisper local). Free tier do ElevenLabs cobre 4-8 lives por mes — suficiente pro fluxo normal do aluno.
+Lives de 1h transcrevem em 2-4 minutos com ElevenLabs (vs 15-60min com Whisper local). Free tier do ElevenLabs cobre algumas lives por mes — suficiente pro fluxo normal do aluno; planos pagos sobem o teto.
 
 ### Como voce executa
 Execute: `python3 setup/setup_transcricao.py`
@@ -171,7 +171,7 @@ O script:
 5. Sempre instala Whisper local (clone `browser-use/video-use` em `~/.operacao-ia/tools/video-use/` + venv + `faster-whisper`) como fallback.
 
 ### O que voce diz pro aluno
-"Vamos configurar a transcricao das suas lives. Vou usar ElevenLabs Scribe como prioridade — e tipo o Whisper mas 5-10x mais rapido, e tem um free tier generoso (10h por mes, da pra 4-8 lives). Se voce nao quiser usar, sem stress, o Whisper local roda offline e cobre tudo. Se quiser ativar agora, cria conta em https://elevenlabs.io/app/sign-up (grátis), pega a chave em Settings → API Keys e cola aqui. Pode pular tambem."
+"Vamos configurar a transcricao das suas lives. Vou usar ElevenLabs Scribe como prioridade — e tipo o Whisper mas 5-10x mais rapido, e tem um free tier (minutos incluidos variam por plano, ver pricing oficial em elevenlabs.io/pricing/api). Se voce nao quiser usar, sem stress, o Whisper local roda offline e cobre tudo. Se quiser ativar agora, cria conta em https://elevenlabs.io/app/sign-up (grátis), pega a chave em Settings → API Keys e cola aqui. Pode pular tambem."
 
 Se aluno disser "pular", apenas confirme e siga — Whisper sera instalado de qualquer jeito.
 
@@ -209,7 +209,7 @@ Apos copiar, o script imprime automaticamente um **explainer** de cada skill (ic
 
 **2 helpers (chamadas pelas de cima, raramente uso direto):**
 
-- 🎨 **gerar-imagem** — gateway com fallback: gpt-image-2 → Gemini Nano Banana → Higgsfield (opcional) → Imagen 4.
+- 🎨 **gerar-imagem** — gateway com fallback: gpt-image-2 → Gemini Nano Banana → Imagen 4.
 - 📹 **gerar-video-mp4** — HTML animado → Chrome headless (Bun/puppeteer-core) → ffmpeg → MP4.
 
 ---
