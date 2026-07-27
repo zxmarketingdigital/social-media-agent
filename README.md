@@ -51,7 +51,7 @@ O Claude conduz a instalação completa em 8 etapas (~30min total).
 
 YouTube longo + Shorts · Instagram Reels + Carrossel + Stories · TikTok · LinkedIn (post + carrossel PDF)
 
-Sem integração de API de publicação — o material é gerado e você publica manualmente.
+Publicação manual no YouTube, TikTok e LinkedIn. No Instagram há publicação automática de 1 Reel por dia como **integração opcional** (token Instagram/Meta + URL pública pro vídeo) — passo a passo em [`docs/PUBLICACAO-AUTOMATICA-INSTAGRAM.md`](docs/PUBLICACAO-AUTOMATICA-INSTAGRAM.md). Não vem ligada: você ativa quando quiser, fora das 8 etapas.
 
 ## Após instalar
 

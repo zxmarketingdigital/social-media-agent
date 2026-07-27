@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Agendamento diario da publicacao do Reel (macOS LaunchAgent).
+
+  Este arquivo e um MOLDE. O instalador (setup/setup_publicacao_ig.py) troca os
+  marcadores __PYTHON__, __SCRIPT__, __HOUR__, __MINUTE__ e __LOGDIR__ por
+  caminhos absolutos e grava o resultado em ~/Library/LaunchAgents/.
+
+  Nenhum token vive aqui: o script le a credencial do arquivo instagram.env
+  na hora de rodar.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.socialmediaagent.ig-reel-daily</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__PYTHON__</string>
+        <string>__SCRIPT__</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>__HOUR__</integer>
+        <key>Minute</key>
+        <integer>__MINUTE__</integer>
+    </dict>
+
+    <!-- Captura ate a falha do proprio interpretador nem iniciar. -->
+    <key>StandardOutPath</key>
+    <string>__LOGDIR__/ig-publish-launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>__LOGDIR__/ig-publish-launchd.log</string>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>

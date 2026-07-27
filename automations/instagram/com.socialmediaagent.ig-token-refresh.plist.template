@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Renovacao semanal do token do Instagram (macOS LaunchAgent).
+
+  O token vale 60 dias e so pode ser renovado depois de 24h de vida. Rodar uma
+  vez por semana mantem ele vivo indefinidamente.
+
+  Este arquivo e um MOLDE. O instalador (setup/setup_publicacao_ig.py) troca os
+  marcadores __PYTHON__, __SCRIPT__ e __LOGDIR__ por caminhos absolutos e grava
+  o resultado em ~/Library/LaunchAgents/.
+
+  Nenhum token vive aqui: o script le a credencial do arquivo instagram.env
+  na hora de rodar.
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.socialmediaagent.ig-token-refresh</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>__PYTHON__</string>
+        <string>__SCRIPT__</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <false/>
+
+    <!-- Weekday 1 = segunda-feira, 09:30. -->
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Weekday</key>
+        <integer>1</integer>
+        <key>Hour</key>
+        <integer>9</integer>
+        <key>Minute</key>
+        <integer>30</integer>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>__LOGDIR__/ig-token-refresh-launchd.log</string>
+    <key>StandardErrorPath</key>
+    <string>__LOGDIR__/ig-token-refresh-launchd.log</string>
+
+    <key>ProcessType</key>
+    <string>Background</string>
+</dict>
+</plist>

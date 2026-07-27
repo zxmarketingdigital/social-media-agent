@@ -56,6 +56,8 @@ def show_summary():
     print("\n🚀 Próximos Setups do ZX Control:")
     print("   • Aula MasterClass do Setup 7: https://zx-control.zxlab.com.br")
     print("   • Comunidade: ZX LAB")
+    print("\n🎁 Bônus opcional (fora das 8 etapas): publicação automática de 1 Reel/dia no Instagram.")
+    print("   Quando quiser ativar, é só me pedir — eu configuro com você.")
     print("=" * 60)
 
 
