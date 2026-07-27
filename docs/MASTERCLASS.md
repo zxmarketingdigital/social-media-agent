@@ -9,7 +9,7 @@ Vídeo único (aula MasterClass) que apresenta todo o Setup. Será hospedado no 
 ### 1. Abertura (0:00 - 1:30)
 - Contexto: aluno já tem agente de tráfego (Setup 6) → agora precisa alimentar funil orgânico
 - Promessa: ao final, criar Reel + carrossel + thumb sem editor de vídeo, sem designer, sem ficar travado em frente à tela em branco
-- Princípio: Setup 7 é sobre CRIAR — publicação fica manual (você decide quando e onde postar)
+- Princípio: Setup 7 é sobre CRIAR — a publicação é manual por padrão (você decide quando e onde postar). Pro Instagram existe um bônus opcional: publicação automática de 1 Reel por dia via token Meta. O passo a passo completo está em `docs/PUBLICACAO-AUTOMATICA-INSTAGRAM.md`; o vídeo de apresentação do Setup de Tráfego Pago entra como apoio pra quem nunca mexeu no Meta for Developers.
 
 ### 2. Quem deve usar (1:30 - 2:30)
 - Criador solo / personal brand
@@ -32,6 +32,7 @@ Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.
 
 ### 5. Setup explicado em alto nível (12:00 - 15:00)
 - 8 etapas, ~30min total
+- Bônus opcional, fora das 8 etapas: publicação automática de 1 Reel/dia no Instagram (integração com token Instagram/Meta)
 - O que cada etapa configura
 - Pré-requisitos:
   - **Base:** Setups 1-6, Python 3.10+, `gh` CLI, `ffmpeg` (`brew install ffmpeg`), Claude Code instalado

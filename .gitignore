@@ -4,3 +4,15 @@ __pycache__/
 .venv/
 .env
 *.log
+
+# Credenciais: `.env` sozinho casa só o basename exato. Qualquer arquivo
+# terminado em .env (instagram.env, gemini.env...) também fica de fora.
+*.env
+# Backups do env gerados pela renovação do token do Instagram.
+*.env.bak.*
+# LaunchAgents renderizados com caminhos absolutos da máquina do aluno.
+*.plist
+
+# Os moldes públicos continuam versionados (sufixo diferente):
+!*.env.example
+!*.plist.template
