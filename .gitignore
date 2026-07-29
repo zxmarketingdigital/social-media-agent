@@ -16,3 +16,11 @@ __pycache__/
 # Os moldes públicos continuam versionados (sufixo diferente):
 !*.env.example
 !*.plist.template
+
+# Saída do /graphify — artefato de análise local, nunca versionar (contém o
+# grafo inteiro do repo, incluindo nomes de skills e infra internos).
+graphify-out/
+
+# Histórico de sessão do Claude: é nota INTERNA de trabalho do Rafael,
+# não material do aluno. Repo é PÚBLICO.
+HISTORICO-SESSOES.md
