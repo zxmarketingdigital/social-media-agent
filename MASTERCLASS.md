@@ -57,12 +57,10 @@ Comentar enquanto roda: como o `DESIGN.md` mantém consistência, como o `marca.
 - Gravar com fundo `DESIGN.md dark-mono` pra demonstrar o sistema
 - Mostrar a tela do Claude Code com font legível (zoom in)
 - Banner ZX LAB sutil no canto superior direito (consistente com cortes-masterclass)
-- Áudio limpo (acompressor + highshelf + loudnorm conforme `feedback_youtube_cortes_masterclass`)
+- Áudio limpo: cadeia `acompressor` + `highshelf` + `loudnorm` no ffmpeg
 
-## Upload
+## Publicação
 
-Após gravação, usar skill `upload-aulas-hub` ou processo manual:
-1. Subir MP4 no Bunny (lib `MasterClass ZX Control`)
-2. Pegar GUID
-3. Substituir `BUNNY_GUID_S7` em `~/projetos/zx-control-semana1/docs/index.html`
-4. Deploy área de membros: `wrangler pages deploy ~/projetos/zx-control-semana1/docs/ --project-name zx-control-semana1`
+Depois de gravado, o vídeo é hospedado e o player entra em `panel-s7-0` da área de
+membros, no lugar do placeholder `BUNNY_GUID_S7`. O passo a passo de publicação é
+operacional da ZX LAB e não faz parte deste repositório.

@@ -1,6 +1,6 @@
 ---
 name: gerar-video-mp4
-description: "Gera vídeo MP4 a partir de animação HTML via pipeline puppeteer + Chrome headless + ffmpeg. Use SEMPRE que o usuário disser: gerar video, criar mp4, exportar mp4, render mp4, animação para reels, hero animation, criativo animado, video para anuncio, video para feed, video stories, animação produto, video promocional, animar landing page, animar lp, criar criativo video, gerar criativo, mp4 instagram, video tiktok, video youtube short, animação curso, video curso, vídeo demo. Diferente de criar-demo-skill (animação terminal ASCII) — esta skill gera vídeo visual gráfico (mockups reais, tipografia, motion design)."
+description: "Gera vídeo MP4 a partir de animação HTML via pipeline puppeteer + Chrome headless + ffmpeg. Use SEMPRE que o usuário disser: gerar video, criar mp4, exportar mp4, render mp4, animação para reels, hero animation, criativo animado, video para anuncio, video para feed, video stories, animação produto, video promocional, animar landing page, animar lp, criar criativo video, gerar criativo, mp4 instagram, video tiktok, video youtube short, animação curso, video curso, vídeo demo. Gera vídeo visual gráfico (mockups reais, tipografia, motion design), não animação de terminal."
 model: sonnet
 effort: medium
 ---
@@ -19,9 +19,9 @@ Sempre que o usuário pedir vídeo MP4 visual gráfico (NÃO terminal/ASCII):
 
 ## NÃO usar quando
 
-- Animação terminal ASCII com spinners/progress bars → usar `/criar-demo-skill`
-- Vídeo de pessoa falando ou screen recording → usar `/video-use`
-- Cortes de masterclass Zoom → usar `/youtube-cortes-masterclass`
+- Animação terminal ASCII com spinners/progress bars — esta skill é motion gráfico, não terminal
+- Vídeo de pessoa falando ou screen recording — grave direto, não passa por render HTML
+- Corte de aula/live longa → usar `/repurpose-conteudo`
 
 ## Pipeline obrigatório
 
@@ -219,18 +219,6 @@ Após gerar 1 versão, oferecer:
 - **60fps interpolado** (motion smoothing)
 - **Versão muted vs com áudio** (`~/.claude/skills/huashu-design/scripts/add-music.sh`)
 - **Resoluções alternativas** (Stories 9:16, YouTube 16:9)
-
-## Adicionar ao launcher (opcional)
-
-Se vídeo for hero pra LP local:
-
-```bash
-ln -sfn $PROJ ~/.zxlab-sites/<alias>
-# Editar ~/.zxlab-sites/launcher.html section "Design & Demos" — adicionar card
-# Validar: curl -s -o /dev/null -w "%{http_code}" http://localhost:8891/<alias>/scene.html
-```
-
-Detalhes em `feedback_launcher_symlink_pattern.md` na memória.
 
 ## Tools/paths fixos
 
