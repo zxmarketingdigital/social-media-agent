@@ -6,7 +6,11 @@ Marca phase_completed=7, abre dashboard.html no browser, imprime resumo + CTA.
 import json
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from setup_base_s7 import ConfigBackupError, backup_config_copy, parse_phase, write_config_atomic  # noqa: E402
 
 OPERACAO = Path.home() / ".operacao-ia"
 CONFIG = OPERACAO / "config" / "config.json"
@@ -19,12 +23,21 @@ def mark_phase():
     if CONFIG.exists():
         try:
             cfg = json.loads(CONFIG.read_text())
+            if not isinstance(cfg, dict):
+                raise ValueError("config.json não é um objeto JSON")
         except Exception:
+            try:
+                backup = backup_config_copy(CONFIG)
+            except ConfigBackupError:
+                sys.exit(1)  # mensagem ja impressa; config original intacto
+            print(f"⚠️  config.json inválido — cópia guardada em {backup.name}")
             cfg = {}
-    cfg["phase_completed"] = max(cfg.get("phase_completed", 0), 7)
-    cfg["s7_installed_at"] = __import__("datetime").datetime.now().isoformat()
-    CONFIG.write_text(json.dumps(cfg, indent=2))
-    print(f"✅ phase_completed=7 marcado em {CONFIG}")
+    atual = parse_phase(cfg.get("phase_completed", 0))
+    if atual < 7:  # nunca reduz um valor existente maior
+        cfg["phase_completed"] = 7
+    cfg["s7_installed_at"] = datetime.now().isoformat()
+    write_config_atomic(cfg, CONFIG)
+    print(f"✅ phase_completed={cfg['phase_completed']} (Setup 7 registrado) em {CONFIG}")
 
 
 def open_dashboard():

@@ -48,7 +48,7 @@ Voce e o instrutor de setup da Semana 7. Seu papel e instalar a operacao complet
 `[░░░░░░░░░░] Etapa 0 de 8`
 
 ### O que e
-Verificacao inicial: Python 3.10+, gh CLI, ffmpeg, Chrome (para `gerar-video-mp4`), Codex CLI logado em ChatGPT (para gpt-image-2), Higgsfield MCP opcional, criacao das pastas necessarias em `~/.operacao-ia/`.
+Verificacao inicial: Python 3.10+, gh CLI, ffmpeg, Chrome (para `gerar-video-mp4`), Codex CLI logado em ChatGPT (para gpt-image-2), Higgsfield MCP opcional, criacao das pastas necessarias em `~/.operacao-ia/` e do `config.json` minimo (se nao existir; se estiver corrompido, faz backup e recria). Este setup nao exige setup anterior — se o aluno ja tem outro setup instalado, o script aproveita o que estiver valido.
 
 ### Para que serve
 Garante que tudo esta no lugar para instalar o Social Media Agent.
@@ -292,7 +292,7 @@ O script:
 - Mostra resumo do que foi instalado
 - Lista os 5 comandos principais
 - Abre `dashboard.html` no browser padrao
-- Marca `phase_completed = 7` em `~/.operacao-ia/config/config.json`
+- Marca `phase_completed = max(atual, 7)` (nunca regride) em `~/.operacao-ia/config/config.json`
 - Mostra CTA dos proximos Setups ZX Control
 
 Apos o script terminar, parabenize o aluno e lembre dos atalhos:

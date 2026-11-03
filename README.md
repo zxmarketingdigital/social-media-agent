@@ -34,7 +34,7 @@ O Claude conduz a instalação completa em 8 etapas (~30min total).
 
 ## Pré-requisitos
 
-- Setup 1 a 6 do ZX Control concluídos (`~/.operacao-ia/config/config.json` com `phase_completed >= 6`)
+- Não exige setup anterior — se você já tem outro setup instalado, ele aproveita o que estiver válido.
 - Python 3.10+
 - gh CLI
 - ffmpeg (`brew install ffmpeg`)

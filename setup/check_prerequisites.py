@@ -3,7 +3,7 @@
 check_prerequisites.py — Confere o ambiente antes de comecar o Setup 7.
 
 Roda o MESMO diagnostico da Etapa 0 (Python, gh, Claude Code, ffmpeg, Chrome,
-Bun, Codex/ChatGPT, Higgsfield, setups anteriores), mas em modo somente-leitura:
+Bun, Codex/ChatGPT, Higgsfield e config.json; nao exige setup anterior), mas em modo somente-leitura:
 nao cria pastas, nao escreve config, nao instala nada. E idempotente — pode
 rodar quantas vezes quiser.
 
@@ -41,7 +41,7 @@ CHECAGENS = [
     ("Bun", base.check_bun, False),
     ("Codex CLI / ChatGPT", base.check_codex_or_chatgpt_cli, False),
     ("Higgsfield MCP", base.check_higgsfield_mcp, False),
-    ("Setups anteriores", base.check_prior_setup, False),
+    ("config.json (nao exige setup anterior)", lambda: base.check_prior_setup(escrever=False), False),
 ]
 
 
