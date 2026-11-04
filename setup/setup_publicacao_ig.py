@@ -332,14 +332,14 @@ def explicar():
     print("\n🎬 Bônus opcional — Publicação Automática no Instagram")
     print("   (fora das 8 etapas do Setup 7 — pular não afeta nada)\n")
     print("   O que isso faz: você coloca os vídeos numa fila, escreve a legenda")
-    print("   de cada um, e o seu Mac publica 1 Reel por dia sozinho, no horário")
+    print("   de cada um, e o seu computador publica 1 Reel por dia sozinho, no horário")
     print("   que você escolher — pela API oficial do Instagram.\n")
     print("   O que você precisa ter:")
     print("     1. Conta do Instagram Business ou Creator")
     print("     2. Um App criado no Meta for Developers")
     print("     3. Um token de longa duração do Instagram")
     print("     4. Um lugar público na internet pra hospedar o vídeo")
-    print("     5. O Mac ligado no horário do post\n")
+    print("     5. O computador ligado no horário do post\n")
     print("   Passo a passo com telas: %s\n" % DOC)
 
 
@@ -500,10 +500,10 @@ def rodar_dry_run():
 
 def agendar():
     print("\n⏰ Agendamento automático")
-    print("   Vou criar 2 rotinas no seu Mac:")
+    print("   Vou criar 2 rotinas no seu computador:")
     print("     • publicar 1 Reel por dia, no horário que você escolher")
     print("     • renovar o token do Instagram 1x por semana (segunda, 09:30)")
-    print("   O Mac precisa estar ligado nesse horário.\n")
+    print("   O computador precisa estar ligado nesse horário.\n")
 
     # Pergunta irreversível: só ativa com um "sim" digitado (default = não).
     if not confirmar("   Quer ativar o agendamento automático agora?"):
